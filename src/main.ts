@@ -1,11 +1,13 @@
 import Fastify from "fastify";
 import { Routes } from "./controller/routes.js";
+import { ServiceFactory } from "./appLayer/service.factory.js";
 
 const fastify = Fastify({
   logger: true,
 });
 
-Routes.register(fastify);
+const serviceFactory = new ServiceFactory();
+Routes.register(fastify, serviceFactory);
 
 fastify.listen({ port: 3000 }, (err, addr) => {
   if (err) {
