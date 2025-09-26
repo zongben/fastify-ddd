@@ -2,7 +2,8 @@
   "name": "fastify-ddd",
   "scripts": {
     "build": "tsc",
-    "start": "docker compose up -d && tsc && cp ./.env.example ./dist && node ./dist/main.js"
+    "dbup": "docker compose up -d",
+    "start": "tsc && cp ./.env.example ./dist && node ./dist/main.js"
   },
   "type": "module",
   "dependencies": {

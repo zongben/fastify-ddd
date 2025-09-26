@@ -1,11 +1,11 @@
 import Fastify from "fastify";
 import { Routes } from "./controller/routes.js";
-import { ServiceFactory } from "./appLayer/service.factory.js";
 import fastifyEnv from "@fastify/env";
 import type { Env } from "./controller/env.js";
 import mongodb from "@fastify/mongodb";
 import path from "path";
 import { fileURLToPath } from "url";
+import { ServiceFactory } from "./application/service.factory.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

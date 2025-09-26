@@ -1,6 +1,6 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { BaseController } from "./base.controller.js";
-import type { ServiceFactory } from "../appLayer/service.factory.js";
+import type { ServiceFactory } from "../application/service.factory.js";
 
 export class AuthController extends BaseController {
   constructor(private serviceFactory: ServiceFactory) {
