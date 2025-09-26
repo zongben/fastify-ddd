@@ -1,11 +1,20 @@
+import { type FastifyMongoObject } from "@fastify/mongodb";
+import { UserRepository } from "../infra/user.repository.js";
 import { LoginService } from "./login/login.service.js";
-import type { IService } from "./service.interface.js";
+import { RegisterService } from "./register/register.service.js";
 
 export class ServiceFactory {
-  constructor() {}
+  constructor(private readonly mongo: FastifyMongoObject) {}
 
-  createLoginService(): IService {
-    const service = new LoginService();
-    return service;
+  #createUserRepository() {
+    return new UserRepository(this.mongo);
+  }
+
+  createRegisterService() {
+    return new RegisterService(this.#createUserRepository());
+  }
+
+  createLoginService() {
+    return new LoginService();
   }
 }

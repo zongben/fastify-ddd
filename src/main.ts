@@ -32,10 +32,11 @@ await fastify.register(fastifyEnv, {
 const env = fastify.getEnvs<Env>();
 
 fastify.register(mongodb, {
+  forceClose: true,
   url: env.MONGO_URL,
 });
 
-const serviceFactory = new ServiceFactory();
+const serviceFactory = new ServiceFactory(fastify.mongo);
 const routes = Routes.create(serviceFactory);
 
 fastify.register(
