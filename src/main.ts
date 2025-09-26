@@ -7,7 +7,14 @@ const fastify = Fastify({
 });
 
 const serviceFactory = new ServiceFactory();
-Routes.register(fastify, serviceFactory);
+const routes = Routes.create(serviceFactory);
+
+fastify.register(
+  (instance) => {
+    routes.anonymousRoutes(instance);
+  },
+  { prefix: "/api" },
+);
 
 fastify.listen({ port: 3000 }, (err, addr) => {
   if (err) {
