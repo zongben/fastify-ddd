@@ -1,23 +1,48 @@
-import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import type { FastifyInstance } from "fastify";
 import { BaseController, Reply } from "./base.controller.js";
 import type { ServiceFactory } from "../application/service.factory.js";
-import { RegisterSchema } from "../contract/auth/register.js";
+import {
+  RegisterSchema,
+  type RegisterReply,
+} from "../contract/auth/register.js";
 import type {
   FastifyReplyTypeBox,
   FastifyRequestTypeBox,
 } from "../contract/base.contract.js";
+import type { LoginReply, LoginSchema } from "../contract/auth/login.js";
+import type { JWT } from "@fastify/jwt";
 
 export class AuthController extends BaseController {
-  constructor(private serviceFactory: ServiceFactory) {
+  constructor(
+    private readonly serviceFactory: ServiceFactory,
+    private readonly jwt: JWT,
+  ) {
     super();
   }
 
-  #login = async (_req: FastifyRequest, _reply: FastifyReply) => {
+  #login = async (
+    req: FastifyRequestTypeBox<typeof LoginSchema>,
+    reply: FastifyReplyTypeBox<typeof LoginSchema>,
+  ) => {
+    const { account, password } = req.body;
+
     const service = this.serviceFactory.createLoginService();
-    service.handle("test");
-    return {
-      hello: "world",
-    };
+    const result = await service.handle({
+      account,
+      password,
+    });
+
+    if (result.isSuccess) {
+      const user = result.data;
+      return Reply.OK<LoginReply>(reply, {
+        token: this.jwt.sign({
+          id: user.id,
+          account: user.account,
+        }),
+      });
+    }
+
+    return Reply.Unauthorized(reply, result.code);
   };
 
   #register = async (
@@ -35,7 +60,7 @@ export class AuthController extends BaseController {
 
     if (result.isSuccess) {
       const { id, account } = result.data;
-      return Reply.OK(reply, {
+      return Reply.OK<RegisterReply>(reply, {
         id,
         account,
       });

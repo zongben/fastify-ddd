@@ -15,6 +15,6 @@ export class ServiceFactory {
   }
 
   createLoginService() {
-    return new LoginService();
+    return new LoginService(this.#createUserRepository());
   }
 }

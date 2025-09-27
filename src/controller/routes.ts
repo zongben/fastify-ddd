@@ -5,13 +5,13 @@ import type { ServiceFactory } from "../application/service.factory.js";
 export class Routes {
   private constructor(private serviceFactory: ServiceFactory) {}
 
-  #registerAuthRoutes(fastify: FastifyInstance) {
-    const authController = new AuthController(this.serviceFactory);
+  #authRoutes(fastify: FastifyInstance) {
+    const authController = new AuthController(this.serviceFactory, fastify.jwt);
     fastify.register(authController.plugin, { prefix: "/auth" });
   }
 
   anonymousRoutes(fastify: FastifyInstance) {
-    this.#registerAuthRoutes(fastify);
+    this.#authRoutes(fastify);
   }
 
   static create(serviceFactory: ServiceFactory) {

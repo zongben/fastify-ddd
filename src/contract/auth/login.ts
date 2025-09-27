@@ -1,27 +1,25 @@
 import Type, { type Static } from "typebox";
-import { OkResponse, ErrorResponse } from "../base.contract.js";
 import { AuthSchema } from "./auth.contract.js";
+import { ErrorResponse, OkResponse } from "../base.contract.js";
 import { ERROR_CODES } from "../../application/error.code.js";
 
 const body = Type.Object({
   account: Type.String(),
   password: Type.String(),
-  username: Type.String(),
 });
 
 const reply = Type.Object({
-  id: Type.String(),
-  account: Type.String(),
+  token: Type.String(),
 });
 
-export type RegisterReply = Static<typeof reply>;
+export type LoginReply = Static<typeof reply>;
 
-export const RegisterSchema = {
+export const LoginSchema = {
   ...AuthSchema,
-  description: "Register a new user",
+  description: "Login",
   body,
   response: {
     200: OkResponse(reply),
-    409: ErrorResponse(ERROR_CODES.ACCOUNT_IS_USED),
+    401: ErrorResponse(ERROR_CODES.LOGIN_FAILED),
   },
 };

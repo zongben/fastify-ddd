@@ -9,6 +9,7 @@ import { ServiceFactory } from "./application/service.factory.js";
 import type { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
+import jwt from "@fastify/jwt";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,9 +21,12 @@ const fastify = Fastify({
 await fastify.register(fastifyEnv, {
   schema: {
     type: "object",
-    required: ["MONGO_URL"],
+    required: ["MONGO_URL", "JWT_KEY"],
     properties: {
       MONGO_URL: {
+        type: "string",
+      },
+      JWT_KEY: {
         type: "string",
       },
     },
@@ -60,6 +64,13 @@ const env = fastify.getEnvs<Env>();
 fastify.register(mongodb, {
   forceClose: true,
   url: env.MONGO_URL,
+});
+
+fastify.register(jwt, {
+  secret: env.JWT_KEY,
+  sign: {
+    expiresIn: "30d",
+  },
 });
 
 fastify.register(

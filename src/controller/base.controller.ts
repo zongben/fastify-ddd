@@ -23,4 +23,11 @@ export class Reply {
       messageCode,
     };
   }
+
+  static Unauthorized(reply: FastifyReply, messageCode: string) {
+    reply.statusCode = 401;
+    return {
+      messageCode,
+    };
+  }
 }
