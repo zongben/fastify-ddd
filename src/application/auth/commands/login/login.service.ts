@@ -1,11 +1,13 @@
 import type { IUserRepository } from "../../../../infra/user.repository.js";
 import { ERROR_CODES } from "../../../error.code.js";
-import { ErrorResult, OkResult } from "../../../service.response.js";
+import { ErrorReturn, OkReturn } from "../../../service.response.js";
 
 export type LoginCommand = {
   account: string;
   password: string;
 };
+
+export type LoginError = ERROR_CODES.LOGIN_FAILED;
 
 export class LoginService {
   constructor(private readonly userRepository: IUserRepository) {}
@@ -15,9 +17,9 @@ export class LoginService {
 
     const user = await this.userRepository.getUserByAccount(account);
     if (user == null || !user.password.matches(password)) {
-      return new ErrorResult(ERROR_CODES.LOGIN_FAILED);
+      return new ErrorReturn<LoginError>(ERROR_CODES.LOGIN_FAILED);
     }
 
-    return new OkResult(user);
+    return new OkReturn(user);
   }
 }

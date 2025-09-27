@@ -1,14 +1,16 @@
 import { v7 } from "uuid";
 import type { IUserRepository } from "../../../../infra/user.repository.js";
 import { Password, User } from "../../../../domain/user.domain.js";
-import { ErrorResult, OkResult } from "../../../service.response.js";
 import { ERROR_CODES } from "../../../error.code.js";
+import { ErrorReturn, OkReturn } from "../../../service.response.js";
 
 export type RegisterCommand = {
   account: string;
   password: string;
   username: string;
 };
+
+export type RegisterError = ERROR_CODES.ACCOUNT_IS_USED;
 
 export class RegisterService {
   constructor(private readonly userRepository: IUserRepository) {}
@@ -19,7 +21,7 @@ export class RegisterService {
     );
 
     if (isUserExists) {
-      return new ErrorResult(ERROR_CODES.ACCOUNT_IS_USED);
+      return new ErrorReturn<RegisterError>(ERROR_CODES.ACCOUNT_IS_USED);
     }
 
     const user = new User({
@@ -29,6 +31,6 @@ export class RegisterService {
       username: command.username,
     });
     await this.userRepository.createUser(user);
-    return new OkResult(user);
+    return new OkReturn(user);
   }
 }

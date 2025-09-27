@@ -11,6 +11,8 @@ import type {
 } from "../contract/base.contract.js";
 import { LoginSchema, type LoginReply } from "../contract/auth/login.js";
 import type { JWT } from "@fastify/jwt";
+import { matchResult } from "../application/service.response.js";
+import { ERROR_CODES } from "../application/error.code.js";
 
 export class AuthController extends BaseController {
   constructor(
@@ -32,17 +34,21 @@ export class AuthController extends BaseController {
       password,
     });
 
-    if (result.isSuccess) {
-      const user = result.data;
-      return Reply.OK<LoginReply>(reply, {
-        token: this.jwt.sign({
-          id: user.id,
-          account: user.account,
-        }),
-      });
-    }
-
-    return Reply.Unauthorized(reply, result.code);
+    return matchResult(result, {
+      ok: (v) => {
+        return Reply.OK<LoginReply>(reply, {
+          token: this.jwt.sign({
+            id: v.id,
+            account: v.account,
+          }),
+        });
+      },
+      err: {
+        [ERROR_CODES.LOGIN_FAILED]: (e) => {
+          return Reply.Unauthorized(reply, e);
+        },
+      },
+    });
   };
 
   #register = async (
@@ -58,15 +64,20 @@ export class AuthController extends BaseController {
       username,
     });
 
-    if (result.isSuccess) {
-      const { id, account } = result.data;
-      return Reply.OK<RegisterReply>(reply, {
-        id,
-        account,
-      });
-    }
-
-    return Reply.Conflict(reply, result.code);
+    return matchResult(result, {
+      ok: (v) => {
+        const { id, account } = v;
+        return Reply.OK<RegisterReply>(reply, {
+          id,
+          account,
+        });
+      },
+      err: {
+        [ERROR_CODES.ACCOUNT_IS_USED]: (e) => {
+          return Reply.Conflict(reply, e);
+        },
+      },
+    });
   };
 
   protected routes(fastify: FastifyInstance): void {
