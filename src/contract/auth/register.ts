@@ -1,10 +1,11 @@
-import { S } from "fluent-json-schema";
+import Type from "typebox";
 
-export const registerBodySchema = S.object()
-  .prop("account", S.string().required())
-  .prop("password", S.string().required())
-  .prop("username", S.string().required());
+const body = Type.Object({
+  account: Type.String(),
+  password: Type.String(),
+  username: Type.String(),
+});
 
-export const registerSchema = {
-  body: registerBodySchema,
+export const RegisterSchema = {
+  body,
 };

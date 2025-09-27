@@ -6,13 +6,14 @@ import mongodb from "@fastify/mongodb";
 import path from "path";
 import { fileURLToPath } from "url";
 import { ServiceFactory } from "./application/service.factory.js";
+import type { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const fastify = Fastify({
   logger: true,
-});
+}).withTypeProvider<TypeBoxTypeProvider>();
 
 await fastify.register(fastifyEnv, {
   schema: {
