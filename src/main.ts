@@ -37,11 +37,11 @@ fastify.register(mongodb, {
   url: env.MONGO_URL,
 });
 
-const serviceFactory = new ServiceFactory(fastify.mongo);
-const routes = Routes.create(serviceFactory);
-
 fastify.register(
   (instance) => {
+    const serviceFactory = new ServiceFactory(fastify.mongo);
+    const routes = Routes.create(serviceFactory);
+
     routes.anonymousRoutes(instance);
   },
   { prefix: "/api" },

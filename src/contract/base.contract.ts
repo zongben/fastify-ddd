@@ -1,4 +1,8 @@
-import type { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
+import {
+  Type,
+  type TSchema,
+  type TypeBoxTypeProvider,
+} from "@fastify/type-provider-typebox";
 import type {
   ContextConfigDefault,
   FastifyBaseLogger,
@@ -38,3 +42,10 @@ export type FastifyReplyTypeBox<TSchema extends FastifySchema> = FastifyReply<
   TSchema,
   TypeBoxTypeProvider
 >;
+
+export function ApiResponse<T extends TSchema>(data: T) {
+  return Type.Object({
+    messageCode: Type.String(),
+    data: Type.Optional(data),
+  });
+}

@@ -1,14 +1,14 @@
-export class OkResponse<T> {
-  isSuccess = true;
-  data: T | undefined;
+export class OkResult<T> {
+  readonly isSuccess = true;
+  data: T;
 
-  constructor(data?: T) {
+  constructor(data: T) {
     this.data = data;
   }
 }
 
-export class ErrorResponse {
-  isSuccess = false;
+export class ErrorResult {
+  readonly isSuccess = false;
   code: string;
 
   constructor(code: string) {

@@ -1,8 +1,11 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { BaseController } from "./base.controller.js";
+import { BaseController, Reply } from "./base.controller.js";
 import type { ServiceFactory } from "../application/service.factory.js";
 import { RegisterSchema } from "../contract/auth/register.js";
-import type { FastifyRequestTypeBox } from "../contract/base.contract.js";
+import type {
+  FastifyReplyTypeBox,
+  FastifyRequestTypeBox,
+} from "../contract/base.contract.js";
 
 export class AuthController extends BaseController {
   constructor(private serviceFactory: ServiceFactory) {
@@ -19,7 +22,7 @@ export class AuthController extends BaseController {
 
   #register = async (
     req: FastifyRequestTypeBox<typeof RegisterSchema>,
-    reply: FastifyReply,
+    reply: FastifyReplyTypeBox<typeof RegisterSchema>,
   ) => {
     const { account, password, username } = req.body;
 
@@ -31,7 +34,14 @@ export class AuthController extends BaseController {
     });
 
     if (res.isSuccess) {
+      const { id, account } = res.data;
+      return Reply.OK(reply, {
+        id,
+        account,
+      });
     }
+
+    return Reply.Conflict(reply, res.code);
   };
 
   protected routes(fastify: FastifyInstance): void {
