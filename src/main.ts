@@ -79,6 +79,7 @@ fastify.register(
     const routes = Routes.create(serviceFactory);
 
     routes.anonymousRoutes(instance);
+    routes.jwtAuthRoutes(instance);
   },
   { prefix: "/api" },
 );
@@ -89,4 +90,5 @@ fastify.listen({ port: 3000 }, (err, addr) => {
     process.exit(1);
   }
   fastify.log.info(`server listening on ${addr}`);
+  fastify.log.info(`swagger-ui on ${addr}/docs`);
 });

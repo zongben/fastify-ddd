@@ -45,7 +45,7 @@ export type FastifyReplyTypeBox<TSchema extends FastifySchema> = FastifyReply<
 
 export function OkResponse<T extends TSchema>(data: T) {
   return Type.Object({
-    messageCode: Type.String(),
+    messageCode: Type.String({default: "SUCCESSED"}),
     data,
   });
 }

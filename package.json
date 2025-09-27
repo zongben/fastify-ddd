@@ -7,8 +7,6 @@
   },
   "type": "module",
   "dependencies": {
-    "@fastify/auth": "^5.0.2",
-    "@fastify/bearer-auth": "^10.1.1",
     "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "^11.1.0",
     "@fastify/env": "^5.0.2",

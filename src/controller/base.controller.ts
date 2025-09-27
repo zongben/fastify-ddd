@@ -12,7 +12,7 @@ export class Reply {
   static OK<T>(reply: FastifyReply, data: T) {
     reply.statusCode = 200;
     return {
-      messageCode: "SUCCESS",
+      messageCode: "SUCCESSED",
       data,
     };
   }

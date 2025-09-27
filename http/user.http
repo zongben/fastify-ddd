@@ -1,0 +1,9 @@
+### 
+
+@url = {{host}}/api/user
+
+###
+
+GET {{url}}
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxOTk4OWQ3LTM3OWEtNzNjZS04OGU5LWNiMWFjMjRmNmU3MyIsImFjY291bnQiOiJ0ZXN0MSIsImlhdCI6MTc1ODk4OTEyMywiZXhwIjoxNzYxNTgxMTIzfQ.8dvnbUbl21GqX7Pikm7ntU1lYE-fOFXBwqINaHYVAVc

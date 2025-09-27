@@ -9,7 +9,7 @@ import type {
   FastifyReplyTypeBox,
   FastifyRequestTypeBox,
 } from "../contract/base.contract.js";
-import type { LoginReply, LoginSchema } from "../contract/auth/login.js";
+import { LoginSchema, type LoginReply } from "../contract/auth/login.js";
 import type { JWT } from "@fastify/jwt";
 
 export class AuthController extends BaseController {
@@ -70,7 +70,7 @@ export class AuthController extends BaseController {
   };
 
   protected routes(fastify: FastifyInstance): void {
-    fastify.post("/login", this.#login);
+    fastify.post("/login", { schema: LoginSchema }, this.#login);
     fastify.post("/register", { schema: RegisterSchema }, this.#register);
   }
 }
