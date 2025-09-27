@@ -27,21 +27,21 @@ export class AuthController extends BaseController {
     const { account, password, username } = req.body;
 
     const service = this.serviceFactory.createRegisterService();
-    const res = await service.handle({
+    const result = await service.handle({
       account,
       password,
       username,
     });
 
-    if (res.isSuccess) {
-      const { id, account } = res.data;
+    if (result.isSuccess) {
+      const { id, account } = result.data;
       return Reply.OK(reply, {
         id,
         account,
       });
     }
 
-    return Reply.Conflict(reply, res.code);
+    return Reply.Conflict(reply, result.code);
   };
 
   protected routes(fastify: FastifyInstance): void {

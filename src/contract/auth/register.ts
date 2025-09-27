@@ -1,5 +1,6 @@
 import Type from "typebox";
-import { ApiResponse } from "../base.contract.js";
+import { OkResponse, ErrorResponse } from "../base.contract.js";
+import { ERROR_CODES } from "../../application/error.code.js";
 
 const body = Type.Object({
   account: Type.String(),
@@ -15,6 +16,7 @@ const reply = Type.Object({
 export const RegisterSchema = {
   body,
   response: {
-    200: ApiResponse(reply),
+    200: OkResponse(reply),
+    409: ErrorResponse(ERROR_CODES.ACCOUNT_IS_USED),
   },
 };

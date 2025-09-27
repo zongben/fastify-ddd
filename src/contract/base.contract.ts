@@ -43,9 +43,15 @@ export type FastifyReplyTypeBox<TSchema extends FastifySchema> = FastifyReply<
   TypeBoxTypeProvider
 >;
 
-export function ApiResponse<T extends TSchema>(data: T) {
+export function OkResponse<T extends TSchema>(data: T) {
   return Type.Object({
     messageCode: Type.String(),
-    data: Type.Optional(data),
+    data,
+  });
+}
+
+export function ErrorResponse(messageCode: string) {
+  return Type.Object({
+    messageCode,
   });
 }
