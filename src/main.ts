@@ -7,6 +7,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { ServiceFactory } from "./application/service.factory.js";
 import type { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
+import swagger from "@fastify/swagger";
+import swaggerUI from "@fastify/swagger-ui";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,6 +29,29 @@ await fastify.register(fastifyEnv, {
   },
   dotenv: {
     path: `${__dirname}/.env.example`,
+  },
+});
+
+await fastify.register(swagger, {
+  openapi: {
+    info: {
+      title: "fastify-ddd",
+      description: "API documentation with Swagger",
+      version: "1.0.0",
+    },
+    servers: [
+      {
+        url: "http://localhost:3000",
+        description: "local",
+      },
+    ],
+  },
+});
+
+await fastify.register(swaggerUI, {
+  routePrefix: "/docs",
+  uiConfig: {
+    docExpansion: "list",
   },
 });
 

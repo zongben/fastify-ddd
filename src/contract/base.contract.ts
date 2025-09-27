@@ -52,6 +52,6 @@ export function OkResponse<T extends TSchema>(data: T) {
 
 export function ErrorResponse(messageCode: string) {
   return Type.Object({
-    messageCode,
+    messageCode: Type.String({ default: messageCode }),
   });
 }

@@ -1,5 +1,6 @@
 import Type from "typebox";
 import { OkResponse, ErrorResponse } from "../base.contract.js";
+import { AuthSchema } from "./auth.contract.js";
 import { ERROR_CODES } from "../../application/error.code.js";
 
 const body = Type.Object({
@@ -14,6 +15,8 @@ const reply = Type.Object({
 });
 
 export const RegisterSchema = {
+  ...AuthSchema,
+  description: "Register a new user",
   body,
   response: {
     200: OkResponse(reply),
