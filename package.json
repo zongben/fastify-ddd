@@ -1,11 +1,10 @@
 {
   "name": "fastify-ddd",
   "scripts": {
+    "db:up": "docker compose up -d",
     "build": "tsc",
-    "dbup": "docker compose up -d",
     "test": "jest",
-    "start": "tsc && cp ./.env.example ./dist && node ./dist/main.js",
-    "sta": "nodemon ./src/main.ts"
+    "start": "nodemon ./src/main.ts"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
