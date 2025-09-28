@@ -6,7 +6,7 @@
     "outDir": "./dist",
     "module": "commonjs",
     "target": "es2022",
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node",
     "lib": [
       "ES2022"
     ],
@@ -14,9 +14,9 @@
       "node",
       "jest"
     ],
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+    "sourceMap": false,
+    "declaration": false,
+    "declarationMap": false,
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "noUnusedLocals": true,
