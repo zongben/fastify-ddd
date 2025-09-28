@@ -2,7 +2,7 @@
   "name": "fastify-ddd",
   "scripts": {
     "db:up": "docker compose up -d",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "test": "jest",
     "start": "nodemon ./src/main.ts"
   },

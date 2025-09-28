@@ -1,10 +1,7 @@
-import {
-  LoginService,
-  type LoginCommand,
-} from "../../../../src/application/auth/commands/login/login.service";
-import { ERROR_CODES } from "../../../../src/application/error.code";
-import { Password, User } from "../../../../src/domain/user.domain";
-import type { IUserRepository } from "../../../../src/infra/user.repository";
+import { Password, User } from "../../../../domain/user.domain";
+import { IUserRepository } from "../../../../infra/user.repository";
+import { ERROR_CODES } from "../../../error.code";
+import { LoginCommand, LoginService } from "./login.service";
 
 let mockUserRepository: IUserRepository;
 

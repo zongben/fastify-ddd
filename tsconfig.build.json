@@ -12,7 +12,6 @@
     ],
     "types": [
       "node",
-      "jest"
     ],
     "sourceMap": false,
     "declaration": false,
@@ -32,5 +31,8 @@
   },
   "exclude": [
     "node_modules",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/jest.setup.ts"
   ]
 }
