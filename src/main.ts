@@ -8,6 +8,7 @@ import type { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
 import jwt from "@fastify/jwt";
+import { initMongoIndexes } from "./infra/schema/collections";
 
 async function bootstrap() {
   const fastify = Fastify({
@@ -23,6 +24,9 @@ async function bootstrap() {
           type: "string",
         },
         JWT_KEY: {
+          type: "string",
+        },
+        NODE_ENV: {
           type: "string",
         },
       },
@@ -60,6 +64,10 @@ async function bootstrap() {
   fastify.register(mongodb, {
     forceClose: true,
     url: env.MONGO_URL,
+  });
+
+  fastify.after(async () => {
+    initMongoIndexes(fastify);
   });
 
   fastify.register(jwt, {
