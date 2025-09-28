@@ -9,6 +9,7 @@ import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
 import jwt from "@fastify/jwt";
 import { initMongoIndexes } from "./infra/schema/collections";
+import { replyPlugin } from "./controller/base.controller";
 
 async function bootstrap() {
   const fastify = Fastify({
@@ -76,6 +77,8 @@ async function bootstrap() {
       expiresIn: "30d",
     },
   });
+
+  fastify.register(replyPlugin)
 
   fastify.register(
     (instance) => {
