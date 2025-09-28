@@ -1,5 +1,5 @@
 import type { FastifyInstance, FastifyRequest } from "fastify";
-import { BaseController } from "./base.controller.js";
+import { BaseController } from "./base.controller";
 
 export class UserController extends BaseController {
   #getUser = async (req: FastifyRequest) => {

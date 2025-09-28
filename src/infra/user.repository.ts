@@ -1,6 +1,6 @@
 import { type FastifyMongoObject } from "@fastify/mongodb";
-import { Password, User } from "../domain/user.domain.js";
-import { COLLECTIONS, type UserSchema } from "./schema/collections.js";
+import { Password, User } from "../domain/user.domain";
+import { COLLECTIONS, type UserSchema } from "./schema/collections";
 
 export interface IUserRepository {
   createUser(user: User): Promise<User>;

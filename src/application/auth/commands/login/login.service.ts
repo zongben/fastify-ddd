@@ -1,6 +1,6 @@
-import type { IUserRepository } from "../../../../infra/user.repository.js";
-import { ERROR_CODES } from "../../../error.code.js";
-import { ErrorReturn, OkReturn } from "../../../service.response.js";
+import type { IUserRepository } from "../../../../infra/user.repository";
+import { ERROR_CODES } from "../../../error.code";
+import { ErrorReturn, OkReturn } from "../../../service.response";
 
 export type LoginCommand = {
   account: string;
