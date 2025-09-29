@@ -68,7 +68,7 @@ async function bootstrap() {
   });
 
   fastify.after(async () => {
-    initMongoIndexes(fastify);
+    initMongoIndexes(fastify.mongo);
   });
 
   fastify.register(jwt, {
@@ -78,7 +78,7 @@ async function bootstrap() {
     },
   });
 
-  fastify.register(replyPlugin)
+  fastify.register(replyPlugin);
 
   fastify.register(
     (instance) => {

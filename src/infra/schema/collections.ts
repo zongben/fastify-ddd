@@ -1,4 +1,4 @@
-import { FastifyInstance } from "fastify";
+import { FastifyMongoObject } from "@fastify/mongodb";
 
 export enum COLLECTIONS {
   USERS = "users",
@@ -11,11 +11,11 @@ export type UserSchema = {
   username: string;
 };
 
-const createUserIndex = async (instance: FastifyInstance) => {
-  const users = instance.mongo.db?.collection<UserSchema>(COLLECTIONS.USERS);
+const createUserIndex = async (mongo: FastifyMongoObject) => {
+  const users = mongo.db?.collection<UserSchema>(COLLECTIONS.USERS);
   await users?.createIndex({ account: 1 }, { unique: true });
 };
 
-export const initMongoIndexes = async (instance: FastifyInstance) => {
-  await createUserIndex(instance);
+export const initMongoIndexes = async (mongo: FastifyMongoObject) => {
+  await createUserIndex(mongo);
 };
