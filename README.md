@@ -2,7 +2,7 @@
 
 ## 依賴方向
 
-![Dependency Direction](https://github.com/user-attachments/assets/35e7cedb-de3e-443d-903e-245f7f7c05e9)
+<img width="878" height="461" alt="LayerStructure" src="https://github.com/user-attachments/assets/1dce73a1-f203-46d0-99e5-e47851df0a83" />
 
 理想上的依賴方向只有實線箭頭，但實務上會有一些額外的相依性則以虛線箭頭呈現。
 
