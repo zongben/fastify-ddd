@@ -1,8 +1,9 @@
 import { Password, User } from "../../../../domain/user.domain.js";
 import { IUserRepository } from "../../../../infra/user.repository.js";
 import { ERROR_CODES } from "../../../error.code.js";
+import { matchResult } from "../../../service.response.js";
 import { LoginCommand, LoginService } from "./login.service.js";
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, test, vi, assert } from "vitest";
 
 let mockUserRepository: IUserRepository;
 
@@ -17,10 +18,16 @@ describe("LoginService", () => {
     const service = new LoginService(mockUserRepository);
     const result = await service.handle({} as LoginCommand);
 
-    expect(result.isSuccess).toEqual(false);
-    if (!result.isSuccess) {
-      expect(result.error).toEqual(ERROR_CODES.LOGIN_FAILED);
-    }
+    matchResult(result, {
+      ok: () => {
+        assert.fail("Should not success");
+      },
+      err: {
+        [ERROR_CODES.LOGIN_FAILED]: (e) => {
+          expect(e).toEqual(ERROR_CODES.LOGIN_FAILED);
+        },
+      },
+    });
   });
 
   test("When password is wrong", async () => {
@@ -33,11 +40,16 @@ describe("LoginService", () => {
       password: "worng_password",
     } as LoginCommand);
 
-    expect(mockUserRepository.getUserByAccount).not.toBeNull();
-    expect(result.isSuccess).toEqual(false);
-    if (!result.isSuccess) {
-      expect(result.error).toEqual(ERROR_CODES.LOGIN_FAILED);
-    }
+    matchResult(result, {
+      ok: () => {
+        assert.fail("Should not success");
+      },
+      err: {
+        [ERROR_CODES.LOGIN_FAILED]: (e) => {
+          expect(e).toEqual(ERROR_CODES.LOGIN_FAILED);
+        },
+      },
+    });
   });
 
   test("Success", async () => {
@@ -54,10 +66,15 @@ describe("LoginService", () => {
       password: "some_password",
     } as LoginCommand);
 
-    expect(mockUserRepository.getUserByAccount).not.toBeNull();
-    expect(result.isSuccess).toEqual(true);
-    if (result.isSuccess) {
-      expect(result.data).toEqual(mockUser);
-    }
+    matchResult(result, {
+      ok: (v) => {
+        expect(v).toEqual(mockUser);
+      },
+      err: {
+        [ERROR_CODES.LOGIN_FAILED]: () => {
+          assert.fail("Should not reach LOGIN_FAILED");
+        },
+      },
+    });
   });
 });
