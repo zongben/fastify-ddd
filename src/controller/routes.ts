@@ -1,7 +1,7 @@
 import { type FastifyInstance } from "fastify";
-import { AuthController } from "./auth.controller";
-import type { ServiceFactory } from "../application/service.factory";
-import { UserController } from "./user.controller";
+import { AuthController } from "./auth.controller.js";
+import type { ServiceFactory } from "../application/service.factory.js";
+import { UserController } from "./user.controller.js";
 
 export class Routes {
   private constructor(private serviceFactory: ServiceFactory) {}

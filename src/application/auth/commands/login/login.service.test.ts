@@ -1,7 +1,8 @@
-import { Password, User } from "../../../../domain/user.domain";
-import { IUserRepository } from "../../../../infra/user.repository";
-import { ERROR_CODES } from "../../../error.code";
-import { LoginCommand, LoginService } from "./login.service";
+import { Password, User } from "../../../../domain/user.domain.js";
+import { IUserRepository } from "../../../../infra/user.repository.js";
+import { ERROR_CODES } from "../../../error.code.js";
+import { LoginCommand, LoginService } from "./login.service.js";
+import { beforeEach, describe, expect, test, vi } from "vitest"
 
 let mockUserRepository: IUserRepository;
 
@@ -11,7 +12,7 @@ describe("LoginService", () => {
   });
 
   test("When user not found", async () => {
-    mockUserRepository.getUserByAccount = jest.fn().mockResolvedValue(null);
+    mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(null);
 
     const service = new LoginService(mockUserRepository);
     const result = await service.handle({} as LoginCommand);
@@ -29,7 +30,7 @@ describe("LoginService", () => {
       password: Password.create("some_password"),
       username: "",
     });
-    mockUserRepository.getUserByAccount = jest.fn().mockResolvedValue(mockUser);
+    mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(mockUser);
 
     const service = new LoginService(mockUserRepository);
     const result = await service.handle({
@@ -50,7 +51,7 @@ describe("LoginService", () => {
       password: Password.create("some_password"),
       username: "",
     });
-    mockUserRepository.getUserByAccount = jest.fn().mockResolvedValue(mockUser);
+    mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(mockUser);
 
     const service = new LoginService(mockUserRepository);
     const result = await service.handle({

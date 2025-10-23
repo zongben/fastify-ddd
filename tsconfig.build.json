@@ -4,9 +4,9 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "module": "commonjs",
+    "module": "node16",
     "target": "es2022",
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "lib": [
       "ES2022"
     ],
@@ -32,7 +32,6 @@
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
-    "**/*.test.ts",
-    "**/jest.setup.ts"
+    "**/*.test.ts"
   ]
 }

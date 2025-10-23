@@ -1,15 +1,15 @@
 import type { FastifyInstance } from "fastify";
-import { BaseController } from "./base.controller";
-import type { ServiceFactory } from "../application/service.factory";
-import { RegisterSchema, type RegisterReply } from "../contract/auth/register";
+import { BaseController } from "./base.controller.js";
+import type { ServiceFactory } from "../application/service.factory.js";
+import { RegisterSchema, type RegisterReply } from "../contract/auth/register.js";
 import type {
   FastifyReplyTypeBox,
   FastifyRequestTypeBox,
-} from "../contract/base.contract";
-import { LoginSchema, type LoginReply } from "../contract/auth/login";
+} from "../contract/base.contract.js";
+import { LoginSchema, type LoginReply } from "../contract/auth/login.js";
 import type { JWT } from "@fastify/jwt";
-import { matchResult } from "../application/service.response";
-import { ERROR_CODES } from "../application/error.code";
+import { matchResult } from "../application/service.response.js";
+import { ERROR_CODES } from "../application/error.code.js";
 
 export class AuthController extends BaseController {
   constructor(
