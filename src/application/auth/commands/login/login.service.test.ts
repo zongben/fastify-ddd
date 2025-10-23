@@ -2,7 +2,7 @@ import { Password, User } from "../../../../domain/user.domain.js";
 import { IUserRepository } from "../../../../infra/user.repository.js";
 import { ERROR_CODES } from "../../../error.code.js";
 import { LoginCommand, LoginService } from "./login.service.js";
-import { beforeEach, describe, expect, test, vi } from "vitest"
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
 let mockUserRepository: IUserRepository;
 
@@ -24,13 +24,9 @@ describe("LoginService", () => {
   });
 
   test("When password is wrong", async () => {
-    const mockUser = new User({
-      id: "",
-      account: "",
+    mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue({
       password: Password.create("some_password"),
-      username: "",
-    });
-    mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(mockUser);
+    } as User);
 
     const service = new LoginService(mockUserRepository);
     const result = await service.handle({
