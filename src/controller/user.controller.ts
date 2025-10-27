@@ -1,6 +1,6 @@
-import type { FastifyRequest } from "fastify";
+import type { FastifyInstance, FastifyRequest } from "fastify";
 
-export const userController = () => {
+const makeUserController = () => {
   return {
     getUser: async (req: FastifyRequest) => {
       const a = req.user;
@@ -8,4 +8,14 @@ export const userController = () => {
       return "test";
     },
   };
+};
+
+export const makeUserRoutes = () => (fastify: FastifyInstance) => {
+  const user = makeUserController();
+  fastify.register(
+    (instance) => {
+      instance.get("/", user.getUser);
+    },
+    { prefix: "/user" },
+  );
 };

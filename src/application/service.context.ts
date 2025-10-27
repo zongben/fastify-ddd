@@ -17,3 +17,4 @@ export const serviceContext = (deps: { repoCtx: RepositoryContext }) => {
 };
 
 export type ServiceContext = ReturnType<typeof serviceContext>;
+export type AuthContext = ReturnType<typeof authHandlers>;

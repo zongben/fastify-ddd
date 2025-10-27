@@ -1,5 +1,4 @@
 import Fastify from "fastify";
-import { Routes } from "./controller/routes.js";
 import fastifyEnv from "@fastify/env";
 import type { Env } from "./controller/env.js";
 import mongodb from "@fastify/mongodb";
@@ -13,6 +12,7 @@ import { dirname } from "node:path";
 import { repositoryContext } from "./infra/repository.context.js";
 import { serviceContext } from "./application/service.context.js";
 import { replyPlugin } from "./controller/reply.extend.js";
+import { registerRoutes } from "./controller/routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -90,11 +90,7 @@ fastify.register(
     const svcCtx = serviceContext({
       repoCtx: repositoryContext({ mongo: fastify.mongo }),
     });
-
-    const routes = Routes.create(svcCtx);
-
-    routes.anonymousRoutes(instance);
-    routes.jwtAuthRoutes(instance);
+    registerRoutes({ ctx: svcCtx })(instance);
   },
   { prefix: "/api" },
 );

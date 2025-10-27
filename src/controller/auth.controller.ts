@@ -10,9 +10,10 @@ import { LoginSchema, type LoginReply } from "../contract/auth/login.js";
 import type { JWT } from "@fastify/jwt";
 import { matchResult } from "../application/service.response.js";
 import { ERROR_CODES } from "../application/error.code.js";
-import { ServiceContext } from "../application/service.context.js";
+import { AuthContext } from "../application/service.context.js";
+import { FastifyInstance } from "fastify";
 
-export const authController = (deps: { ctx: ServiceContext; jwt: JWT }) => {
+const makeAuthController = (deps: { ctx: AuthContext; jwt: JWT }) => {
   const { ctx, jwt } = deps;
 
   return {
@@ -22,7 +23,7 @@ export const authController = (deps: { ctx: ServiceContext; jwt: JWT }) => {
     ) => {
       const { account, password } = req.body;
 
-      const result = await ctx.auth.login({
+      const result = await ctx.login({
         account,
         password,
       });
@@ -48,7 +49,7 @@ export const authController = (deps: { ctx: ServiceContext; jwt: JWT }) => {
     ) => {
       const { account, password, username } = req.body;
 
-      const result = await ctx.auth.register({
+      const result = await ctx.register({
         account,
         password,
         username,
@@ -71,3 +72,18 @@ export const authController = (deps: { ctx: ServiceContext; jwt: JWT }) => {
     },
   };
 };
+
+export const makeAuthRoutes =
+  (deps: { ctx: AuthContext }) => (fastify: FastifyInstance) => {
+    const auth = makeAuthController({
+      ...deps,
+      jwt: fastify.jwt,
+    });
+    fastify.register(
+      (instance) => {
+        instance.post("/login", { schema: LoginSchema }, auth.login);
+        instance.post("/register", { schema: RegisterSchema }, auth.register);
+      },
+      { prefix: "/auth" },
+    );
+  };

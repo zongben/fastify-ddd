@@ -1,60 +1,31 @@
 import { type FastifyInstance } from "fastify";
-import { userController } from "./user.controller.js";
-import {
-  ServiceContext,
-  serviceContext,
-} from "../application/service.context.js";
-import { authController } from "./auth.controller.js";
-import { LoginSchema } from "../contract/auth/login.js";
-import { RegisterSchema } from "../contract/auth/register.js";
+import { makeUserRoutes } from "./user.controller.js";
+import { ServiceContext } from "../application/service.context.js";
+import { makeAuthRoutes } from "./auth.controller.js";
 
-export class Routes {
-  private constructor(private readonly ctx: ServiceContext) {}
-
-  #authRoutes(fastify: FastifyInstance) {
-    const auth = authController({
-      ctx: this.ctx,
-      jwt: fastify.jwt,
+const anonymousRoutes =
+  (deps: { ctx: ServiceContext }) => (fastify: FastifyInstance) => {
+    const { ctx } = deps;
+    fastify.register((instance) => {
+      makeAuthRoutes({ ctx: ctx.auth })(instance);
     });
-    fastify.register(
-      (instance) => {
-        instance.post("/login", { schema: LoginSchema }, auth.login);
-        instance.post("/register", { schema: RegisterSchema }, auth.register);
-      },
-      { prefix: "/auth" },
-    );
-  }
+  };
 
-  #userRoutes(fastify: FastifyInstance) {
-    const user = userController();
-    fastify.register(
-      (instance) => {
-        instance.get("/", user.getUser);
-      },
-      { prefix: "/user" },
-    );
-  }
-
-  anonymousRoutes(fastify: FastifyInstance) {
-    fastify.register(async (instance) => {
-      this.#authRoutes(instance);
+const jwtAuthRoutes = () => (fastify: FastifyInstance) => {
+  fastify.register((instance) => {
+    instance.addHook("onRequest", async (req, reply) => {
+      try {
+        await req.jwtVerify();
+      } catch (err) {
+        reply.send(err);
+      }
     });
-  }
+    makeUserRoutes()(instance);
+  });
+};
 
-  jwtAuthRoutes(fastify: FastifyInstance) {
-    fastify.register(async (instance) => {
-      instance.addHook("onRequest", async (req, reply) => {
-        try {
-          await req.jwtVerify();
-        } catch (err) {
-          reply.send(err);
-        }
-      });
-      this.#userRoutes(instance);
-    });
-  }
-
-  static create(svcCtx: ReturnType<typeof serviceContext>) {
-    return new Routes(svcCtx);
-  }
-}
+export const registerRoutes =
+  (deps: { ctx: ServiceContext }) => (fastify: FastifyInstance) => {
+    anonymousRoutes(deps)(fastify);
+    jwtAuthRoutes()(fastify);
+  };
