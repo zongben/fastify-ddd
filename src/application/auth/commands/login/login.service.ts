@@ -1,6 +1,6 @@
 import { ERROR_CODES } from "../../../error.code.js";
 import { ErrorReturn, OkReturn } from "../../../service.response.js";
-import { userRepository } from "../../../../infra/user.repository.js";
+import { IUserRepository } from "../../../../infra/user.repository.js";
 
 export type LoginCommand = {
   account: string;
@@ -9,9 +9,7 @@ export type LoginCommand = {
 
 export type LoginError = ERROR_CODES.LOGIN_FAILED;
 
-export const loginService = (deps: {
-  userRepository: ReturnType<typeof userRepository>;
-}) => {
+export const makeLoginHandler = (deps: { userRepository: IUserRepository }) => {
   const { userRepository } = deps;
 
   return async (command: LoginCommand) => {

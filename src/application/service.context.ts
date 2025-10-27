@@ -1,18 +1,19 @@
-import { registerService } from "./auth/commands/register/register.service.js";
-import { loginService } from "./auth/commands/login/login.service.js";
-import { repositoryContext } from "../infra/repository.context.js";
+import { makeRegisterHandler } from "./auth/commands/register/register.service.js";
+import { makeLoginHandler } from "./auth/commands/login/login.service.js";
+import { RepositoryContext } from "../infra/repository.context.js";
+import { IUserRepository } from "../infra/user.repository.js";
 
-export const serviceContext = (deps: {
-  repositoryCtx: ReturnType<typeof repositoryContext>;
-}) => {
-  const { repositoryCtx } = deps;
+const authHandlers = (deps: { userRepository: IUserRepository }) => ({
+  register: makeRegisterHandler(deps),
+  login: makeLoginHandler(deps),
+});
+
+export const serviceContext = (deps: { repoCtx: RepositoryContext }) => {
+  const { repoCtx } = deps;
 
   return {
-    registerService: registerService({
-      userRepository: repositoryCtx.userRepository,
-    }),
-    loginService: loginService({
-      userRepository: repositoryCtx.userRepository,
-    }),
+    auth: authHandlers({ userRepository: repoCtx.userRepository }),
   };
 };
+
+export type ServiceContext = ReturnType<typeof serviceContext>;

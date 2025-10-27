@@ -1,8 +1,10 @@
 import { FastifyMongoObject } from "@fastify/mongodb";
-import { userRepository } from "./user.repository.js";
+import { makeUserRepository } from "./user.repository.js";
+
+export type RepositoryContext = ReturnType<typeof repositoryContext>;
 
 export const repositoryContext = (deps: { mongo: FastifyMongoObject }) => {
   return {
-    userRepository: userRepository(deps),
+    userRepository: makeUserRepository(deps),
   };
 };

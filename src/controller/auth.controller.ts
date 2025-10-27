@@ -10,13 +10,10 @@ import { LoginSchema, type LoginReply } from "../contract/auth/login.js";
 import type { JWT } from "@fastify/jwt";
 import { matchResult } from "../application/service.response.js";
 import { ERROR_CODES } from "../application/error.code.js";
-import { serviceContext } from "../application/service.context.js";
+import { ServiceContext } from "../application/service.context.js";
 
-export const authController = (deps: {
-  serviceCtx: ReturnType<typeof serviceContext>;
-  jwt: JWT;
-}) => {
-  const { serviceCtx, jwt } = deps;
+export const authController = (deps: { ctx: ServiceContext; jwt: JWT }) => {
+  const { ctx, jwt } = deps;
 
   return {
     login: async (
@@ -25,7 +22,7 @@ export const authController = (deps: {
     ) => {
       const { account, password } = req.body;
 
-      const result = await serviceCtx.loginService({
+      const result = await ctx.auth.login({
         account,
         password,
       });
@@ -51,7 +48,7 @@ export const authController = (deps: {
     ) => {
       const { account, password, username } = req.body;
 
-      const result = await serviceCtx.registerService({
+      const result = await ctx.auth.register({
         account,
         password,
         username,

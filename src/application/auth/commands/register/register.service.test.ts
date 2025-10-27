@@ -1,24 +1,24 @@
-import { userRepository } from "../../../../infra/user.repository.js";
+import { makeUserRepository } from "../../../../infra/user.repository.js";
 import { assert, beforeEach, describe, expect, test, vi } from "vitest";
-import { RegisterCommand, registerService } from "./register.service.js";
+import { RegisterCommand, makeRegisterHandler } from "./register.service.js";
 import { Password, User } from "../../../../domain/user.domain.js";
 import { ERROR_CODES } from "../../../error.code.js";
 import { matchResult } from "../../../service.response.js";
 
-let mockUserRepository: ReturnType<typeof userRepository>;
+let mockUserRepository: ReturnType<typeof makeUserRepository>;
 
 describe("RegisterService", () => {
   beforeEach(() => {
-    mockUserRepository = {} as ReturnType<typeof userRepository>;
+    mockUserRepository = {} as ReturnType<typeof makeUserRepository>;
   });
 
   test("When user is exists", async () => {
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue({} as User);
 
-    const service = registerService({
+    const handler = makeRegisterHandler({
       userRepository: mockUserRepository,
     });
-    const result = await service({} as RegisterCommand);
+    const result = await handler({} as RegisterCommand);
 
     matchResult(result, {
       ok: () => {
@@ -36,10 +36,10 @@ describe("RegisterService", () => {
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(null);
     mockUserRepository.createUser = vi.fn();
 
-    const service = registerService({
+    const handler = makeRegisterHandler({
       userRepository: mockUserRepository,
     });
-    const result = await service({
+    const result = await handler({
       account: "account",
       username: "username",
       password: "password",

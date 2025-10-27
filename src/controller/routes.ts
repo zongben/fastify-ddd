@@ -1,18 +1,19 @@
 import { type FastifyInstance } from "fastify";
 import { userController } from "./user.controller.js";
-import { serviceContext } from "../application/service.context.js";
+import {
+  ServiceContext,
+  serviceContext,
+} from "../application/service.context.js";
 import { authController } from "./auth.controller.js";
 import { LoginSchema } from "../contract/auth/login.js";
 import { RegisterSchema } from "../contract/auth/register.js";
 
 export class Routes {
-  private constructor(
-    private readonly svcCtx: ReturnType<typeof serviceContext>,
-  ) {}
+  private constructor(private readonly ctx: ServiceContext) {}
 
   #authRoutes(fastify: FastifyInstance) {
     const auth = authController({
-      serviceCtx: this.svcCtx,
+      ctx: this.ctx,
       jwt: fastify.jwt,
     });
     fastify.register(

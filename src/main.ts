@@ -88,7 +88,7 @@ fastify.register(replyPlugin);
 fastify.register(
   (instance) => {
     const svcCtx = serviceContext({
-      repositoryCtx: repositoryContext({ mongo: fastify.mongo }),
+      repoCtx: repositoryContext({ mongo: fastify.mongo }),
     });
 
     const routes = Routes.create(svcCtx);

@@ -2,7 +2,14 @@ import { type FastifyMongoObject } from "@fastify/mongodb";
 import { Password, User } from "../domain/user.domain.js";
 import { COLLECTIONS, type UserSchema } from "./schema/collections.js";
 
-export const userRepository = (deps: { mongo: FastifyMongoObject }) => {
+export interface IUserRepository {
+  createUser(user: User): Promise<User>;
+  getUserByAccount(account: string): Promise<User | null>;
+}
+
+export const makeUserRepository = (deps: {
+  mongo: FastifyMongoObject;
+}): IUserRepository => {
   const { mongo } = deps;
 
   return {

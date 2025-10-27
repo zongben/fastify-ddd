@@ -1,5 +1,5 @@
 import { v7 } from "uuid";
-import type { userRepository } from "../../../../infra/user.repository.js";
+import type { IUserRepository } from "../../../../infra/user.repository.js";
 import { Password, User } from "../../../../domain/user.domain.js";
 import { ERROR_CODES } from "../../../error.code.js";
 import { ErrorReturn, OkReturn } from "../../../service.response.js";
@@ -12,9 +12,7 @@ export type RegisterCommand = {
 
 export type RegisterError = ERROR_CODES.ACCOUNT_IS_USED;
 
-export const registerService = (deps: {
-  userRepository: ReturnType<typeof userRepository>;
-}) => {
+export const makeRegisterHandler = (deps: { userRepository: IUserRepository }) => {
   const { userRepository } = deps;
 
   return async (command: RegisterCommand) => {

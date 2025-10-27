@@ -1,24 +1,24 @@
 import { Password, User } from "../../../../domain/user.domain.js";
-import { userRepository } from "../../../../infra/user.repository.js";
+import { IUserRepository } from "../../../../infra/user.repository.js";
 import { ERROR_CODES } from "../../../error.code.js";
 import { matchResult } from "../../../service.response.js";
-import { LoginCommand, loginService } from "./login.service.js";
+import { LoginCommand, makeLoginHandler } from "./login.service.js";
 import { beforeEach, describe, expect, test, vi, assert } from "vitest";
 
-let mockUserRepository: ReturnType<typeof userRepository>;
+let mockUserRepository: IUserRepository;
 
 describe("LoginService", () => {
   beforeEach(() => {
-    mockUserRepository = {} as ReturnType<typeof userRepository>;
+    mockUserRepository = {} as IUserRepository;
   });
 
   test("When user not found", async () => {
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(null);
 
-    const service = loginService({
+    const handler = makeLoginHandler({
       userRepository: mockUserRepository,
     });
-    const result = await service({} as LoginCommand);
+    const result = await handler({} as LoginCommand);
 
     matchResult(result, {
       ok: () => {
@@ -37,10 +37,10 @@ describe("LoginService", () => {
       password: Password.create("some_password"),
     } as User);
 
-    const service = loginService({
+    const handler = makeLoginHandler({
       userRepository: mockUserRepository,
     });
-    const result = await service({
+    const result = await handler({
       password: "worng_password",
     } as LoginCommand);
 
@@ -65,10 +65,10 @@ describe("LoginService", () => {
     });
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(mockUser);
 
-    const service = loginService({
+    const handler = makeLoginHandler({
       userRepository: mockUserRepository,
     });
-    const result = await service({
+    const result = await handler({
       password: "some_password",
     } as LoginCommand);
 
