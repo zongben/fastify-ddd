@@ -1,19 +1,37 @@
 import { type FastifyInstance } from "fastify";
-import { AuthController } from "./auth.controller.js";
-import type { ServiceFactory } from "../application/service.factory.js";
-import { UserController } from "./user.controller.js";
+import { userController } from "./user.controller.js";
+import { serviceContext } from "../application/service.context.js";
+import { authController } from "./auth.controller.js";
+import { LoginSchema } from "../contract/auth/login.js";
+import { RegisterSchema } from "../contract/auth/register.js";
 
 export class Routes {
-  private constructor(private serviceFactory: ServiceFactory) {}
+  private constructor(
+    private readonly svcCtx: ReturnType<typeof serviceContext>,
+  ) {}
 
   #authRoutes(fastify: FastifyInstance) {
-    const authController = new AuthController(this.serviceFactory, fastify.jwt);
-    fastify.register(authController.plugin, { prefix: "/auth" });
+    const auth = authController({
+      serviceCtx: this.svcCtx,
+      jwt: fastify.jwt,
+    });
+    fastify.register(
+      (instance) => {
+        instance.post("/login", { schema: LoginSchema }, auth.login);
+        instance.post("/register", { schema: RegisterSchema }, auth.register);
+      },
+      { prefix: "/auth" },
+    );
   }
 
   #userRoutes(fastify: FastifyInstance) {
-    const userController = new UserController();
-    fastify.register(userController.plugin, { prefix: "/user" });
+    const user = userController();
+    fastify.register(
+      (instance) => {
+        instance.get("/", user.getUser);
+      },
+      { prefix: "/user" },
+    );
   }
 
   anonymousRoutes(fastify: FastifyInstance) {
@@ -35,7 +53,7 @@ export class Routes {
     });
   }
 
-  static create(serviceFactory: ServiceFactory) {
-    return new Routes(serviceFactory);
+  static create(svcCtx: ReturnType<typeof serviceContext>) {
+    return new Routes(svcCtx);
   }
 }

@@ -1,22 +1,24 @@
-import { IUserRepository } from "../../../../infra/user.repository.js";
+import { userRepository } from "../../../../infra/user.repository.js";
 import { assert, beforeEach, describe, expect, test, vi } from "vitest";
-import { RegisterCommand, RegisterService } from "./register.service.js";
+import { RegisterCommand, registerService } from "./register.service.js";
 import { Password, User } from "../../../../domain/user.domain.js";
 import { ERROR_CODES } from "../../../error.code.js";
 import { matchResult } from "../../../service.response.js";
 
-let mockUserRepository: IUserRepository;
+let mockUserRepository: ReturnType<typeof userRepository>;
 
 describe("RegisterService", () => {
   beforeEach(() => {
-    mockUserRepository = {} as IUserRepository;
+    mockUserRepository = {} as ReturnType<typeof userRepository>;
   });
 
   test("When user is exists", async () => {
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue({} as User);
 
-    const service = new RegisterService(mockUserRepository);
-    const result = await service.handle({} as RegisterCommand);
+    const service = registerService({
+      userRepository: mockUserRepository,
+    });
+    const result = await service({} as RegisterCommand);
 
     matchResult(result, {
       ok: () => {
@@ -34,8 +36,10 @@ describe("RegisterService", () => {
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(null);
     mockUserRepository.createUser = vi.fn();
 
-    const service = new RegisterService(mockUserRepository);
-    const result = await service.handle({
+    const service = registerService({
+      userRepository: mockUserRepository,
+    });
+    const result = await service({
       account: "account",
       username: "username",
       password: "password",
@@ -46,7 +50,7 @@ describe("RegisterService", () => {
     matchResult(result, {
       ok: (v) => {
         expect(v).instanceof(User);
-        expect(v.password).toEqual(Password.fromHash(v.password.hash))
+        expect(v.password).toEqual(Password.fromHash(v.password.hash));
       },
       err: {
         [ERROR_CODES.ACCOUNT_IS_USED]: () => {

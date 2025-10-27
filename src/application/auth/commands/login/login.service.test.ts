@@ -1,22 +1,24 @@
 import { Password, User } from "../../../../domain/user.domain.js";
-import { IUserRepository } from "../../../../infra/user.repository.js";
+import { userRepository } from "../../../../infra/user.repository.js";
 import { ERROR_CODES } from "../../../error.code.js";
 import { matchResult } from "../../../service.response.js";
-import { LoginCommand, LoginService } from "./login.service.js";
+import { LoginCommand, loginService } from "./login.service.js";
 import { beforeEach, describe, expect, test, vi, assert } from "vitest";
 
-let mockUserRepository: IUserRepository;
+let mockUserRepository: ReturnType<typeof userRepository>;
 
 describe("LoginService", () => {
   beforeEach(() => {
-    mockUserRepository = {} as IUserRepository;
+    mockUserRepository = {} as ReturnType<typeof userRepository>;
   });
 
   test("When user not found", async () => {
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(null);
 
-    const service = new LoginService(mockUserRepository);
-    const result = await service.handle({} as LoginCommand);
+    const service = loginService({
+      userRepository: mockUserRepository,
+    });
+    const result = await service({} as LoginCommand);
 
     matchResult(result, {
       ok: () => {
@@ -35,8 +37,10 @@ describe("LoginService", () => {
       password: Password.create("some_password"),
     } as User);
 
-    const service = new LoginService(mockUserRepository);
-    const result = await service.handle({
+    const service = loginService({
+      userRepository: mockUserRepository,
+    });
+    const result = await service({
       password: "worng_password",
     } as LoginCommand);
 
@@ -61,8 +65,10 @@ describe("LoginService", () => {
     });
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(mockUser);
 
-    const service = new LoginService(mockUserRepository);
-    const result = await service.handle({
+    const service = loginService({
+      userRepository: mockUserRepository,
+    });
+    const result = await service({
       password: "some_password",
     } as LoginCommand);
 

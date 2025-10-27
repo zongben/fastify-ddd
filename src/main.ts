@@ -3,16 +3,16 @@ import { Routes } from "./controller/routes.js";
 import fastifyEnv from "@fastify/env";
 import type { Env } from "./controller/env.js";
 import mongodb from "@fastify/mongodb";
-import { ServiceFactory } from "./application/service.factory.js";
 import type { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
 import jwt from "@fastify/jwt";
 import { initMongoIndexes } from "./infra/schema/collections.js";
-import { replyPlugin } from "./controller/base.controller.js";
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
-import { RepositoryFactory } from "./infra/repository.factory.js";
+import { repositoryContext } from "./infra/repository.context.js";
+import { serviceContext } from "./application/service.context.js";
+import { replyPlugin } from "./controller/reply.extend.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -87,9 +87,11 @@ fastify.register(replyPlugin);
 
 fastify.register(
   (instance) => {
-    const repositoryFactory = new RepositoryFactory(fastify.mongo);
-    const serviceFactory = new ServiceFactory(repositoryFactory);
-    const routes = Routes.create(serviceFactory);
+    const svcCtx = serviceContext({
+      repositoryCtx: repositoryContext({ mongo: fastify.mongo }),
+    });
+
+    const routes = Routes.create(svcCtx);
 
     routes.anonymousRoutes(instance);
     routes.jwtAuthRoutes(instance);
