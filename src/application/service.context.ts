@@ -1,5 +1,5 @@
-import { makeRegisterHandler } from "./auth/commands/register/register.service.js";
-import { makeLoginHandler } from "./auth/commands/login/login.service.js";
+import { makeRegisterHandler } from "./auth/commands/register/register.handler.js";
+import { makeLoginHandler } from "./auth/commands/login/login.handler.js";
 import { RepositoryContext } from "../infra/repository.context.js";
 import { IUserRepository } from "../infra/user.repository.js";
 

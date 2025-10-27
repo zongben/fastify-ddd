@@ -2,8 +2,8 @@ import { Password, User } from "../../../../domain/user.domain.js";
 import { IUserRepository } from "../../../../infra/user.repository.js";
 import { ERROR_CODES } from "../../../error.code.js";
 import { matchResult } from "../../../service.response.js";
-import { LoginCommand, makeLoginHandler } from "./login.service.js";
 import { beforeEach, describe, expect, test, vi, assert } from "vitest";
+import { LoginCommand, makeLoginHandler } from "./login.handler.js";
 
 let mockUserRepository: IUserRepository;
 
