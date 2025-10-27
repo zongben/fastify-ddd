@@ -12,6 +12,7 @@ import { initMongoIndexes } from "./infra/schema/collections.js";
 import { replyPlugin } from "./controller/base.controller.js";
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
+import { RepositoryFactory } from "./infra/repository.factory.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -86,7 +87,8 @@ fastify.register(replyPlugin);
 
 fastify.register(
   (instance) => {
-    const serviceFactory = new ServiceFactory(fastify.mongo);
+    const repositoryFactory = new RepositoryFactory(fastify.mongo);
+    const serviceFactory = new ServiceFactory(repositoryFactory);
     const routes = Routes.create(serviceFactory);
 
     routes.anonymousRoutes(instance);
