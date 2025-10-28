@@ -12,7 +12,7 @@ import { dirname } from "node:path";
 import { makeRepositoryContext } from "./infra/repository.context.js";
 import { registerRoutes } from "./controller/routes.js";
 import { replyHttpPlugin } from "./shared/reply.extend.js";
-import { makeUseCaseContext } from "./application/use-case.context.js";
+import { makeUseCaseContext } from "./application/use-cases/use-case.context.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

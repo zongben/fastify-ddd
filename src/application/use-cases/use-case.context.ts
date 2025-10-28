@@ -1,7 +1,7 @@
 import { makeRegisterHandler } from "./auth/commands/register/register.handler.js";
 import { makeLoginHandler } from "./auth/commands/login/login.handler.js";
-import { RepositoryContext } from "../infra/repository.context.js";
-import { IUserRepository } from "../infra/user.repository.js";
+import { IUserRepository } from "../../infra/user.repository.js";
+import { RepositoryContext } from "../../infra/repository.context.js";
 
 const makeAuthUseCases = (deps: { userRepository: IUserRepository }) => ({
   register: makeRegisterHandler(deps),

@@ -1,9 +1,9 @@
-import { makeUserRepository } from "../../../../infra/user.repository.js";
 import { assert, beforeEach, describe, expect, test, vi } from "vitest";
 import { RegisterCommand, makeRegisterHandler } from "./register.handler.js";
-import { Password, User } from "../../../../domain/user.domain.js";
-import { ERROR_CODES } from "../../../error.code.js";
-import { matchResult } from "../../../../shared/result.js";
+import { makeUserRepository } from "../../../../../infra/user.repository.js";
+import { Password, User } from "../../../../../domain/user.domain.js";
+import { matchResult } from "../../../../../shared/result.js";
+import { ERROR_CODES } from "../../../../error.code.js";
 
 let mockUserRepository: ReturnType<typeof makeUserRepository>;
 

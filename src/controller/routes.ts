@@ -1,7 +1,7 @@
 import { type FastifyInstance } from "fastify";
 import { makeUserRoutes } from "./user.controller.js";
 import { makeAuthRoutes } from "./auth.controller.js";
-import { UseCaseContext } from "../application/use-case.context.js";
+import { UseCaseContext } from "../application/use-cases/use-case.context.js";
 
 const anonymousRoutes =
   (deps: { ctx: UseCaseContext }) => (fastify: FastifyInstance) => {

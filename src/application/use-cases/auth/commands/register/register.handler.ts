@@ -1,8 +1,8 @@
 import { v7 } from "uuid";
-import type { IUserRepository } from "../../../../infra/user.repository.js";
-import { Password, User } from "../../../../domain/user.domain.js";
-import { ERROR_CODES } from "../../../error.code.js";
-import { err, ok } from "../../../../shared/result.js";
+import { ERROR_CODES } from "../../../../error.code.js";
+import { IUserRepository } from "../../../../../infra/user.repository.js";
+import { err, ok } from "../../../../../shared/result.js";
+import { Password, User } from "../../../../../domain/user.domain.js";
 
 export type RegisterCommand = {
   account: string;
