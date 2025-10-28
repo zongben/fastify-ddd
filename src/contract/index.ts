@@ -43,15 +43,24 @@ export type FastifyReplyTypeBox<TSchema extends FastifySchema> = FastifyReply<
   TypeBoxTypeProvider
 >;
 
-export function OkResponse<T extends TSchema>(data: T) {
+export const makeOkSchema = <T extends TSchema>(data: T) => {
   return Type.Object({
-    messageCode: Type.String({default: "SUCCESSED"}),
+    messageCode: Type.String({ default: "SUCCESSED" }),
     data,
   });
-}
+};
 
-export function ErrorResponse(messageCode: string) {
+export const makeErrSchema = (messageCode: string) => {
   return Type.Object({
     messageCode: Type.String({ default: messageCode }),
   });
-}
+};
+
+export type OK<T> = {
+  messageCode: string;
+  data: T;
+};
+
+export type Err = {
+  messageCode: string;
+};

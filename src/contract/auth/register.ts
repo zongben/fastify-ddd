@@ -1,7 +1,7 @@
 import Type, { type Static } from "typebox";
-import { OkResponse, ErrorResponse } from "../base.contract.js";
 import { AuthSchema } from "./auth.contract.js";
 import { ERROR_CODES } from "../../application/error.code.js";
+import { makeErrSchema, makeOkSchema } from "../index.js";
 
 const body = Type.Object({
   account: Type.String(),
@@ -21,7 +21,7 @@ export const RegisterSchema = {
   description: "Register a new user",
   body,
   response: {
-    200: OkResponse(reply),
-    409: ErrorResponse(ERROR_CODES.ACCOUNT_IS_USED),
+    200: makeOkSchema(reply),
+    409: makeErrSchema(ERROR_CODES.ACCOUNT_IS_USED),
   },
 };

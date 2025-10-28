@@ -2,16 +2,16 @@ import {
   RegisterSchema,
   type RegisterReply,
 } from "../contract/auth/register.js";
-import type {
-  FastifyReplyTypeBox,
-  FastifyRequestTypeBox,
-} from "../contract/base.contract.js";
 import { LoginSchema, type LoginReply } from "../contract/auth/login.js";
 import type { JWT } from "@fastify/jwt";
 import { ERROR_CODES } from "../application/error.code.js";
 import { AuthContext } from "../application/service.context.js";
 import { FastifyInstance } from "fastify";
 import { matchResult } from "../shared/result.js";
+import {
+  FastifyReplyTypeBox,
+  FastifyRequestTypeBox,
+} from "../contract/index.js";
 
 const makeAuthController = (deps: { ctx: AuthContext; jwt: JWT }) => {
   const { ctx, jwt } = deps;

@@ -11,8 +11,8 @@ import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
 import { repositoryContext } from "./infra/repository.context.js";
 import { serviceContext } from "./application/service.context.js";
-import { replyPlugin } from "./controller/reply.extend.js";
 import { registerRoutes } from "./controller/routes.js";
+import { replyHttpPlugin } from "./shared/reply.extend.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -83,7 +83,7 @@ fastify.register(jwt, {
   },
 });
 
-fastify.register(replyPlugin);
+fastify.register(replyHttpPlugin);
 
 fastify.register(
   (instance) => {
