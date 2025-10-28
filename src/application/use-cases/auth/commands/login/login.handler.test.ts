@@ -3,8 +3,8 @@ import { LoginCommand, makeLoginHandler } from "./login.handler.js";
 import { IUserRepository } from "../../../../../infra/user.repository.js";
 import { matchResult } from "../../../../../shared/result.js";
 import { ERROR_CODES } from "../../../../error.code.js";
-import { createUser, User } from "../../../../../domain/user.domain.js";
 import { crypt } from "../../../../../utils/index.js";
+import { createUser, User } from "../../../../../domain/user/user.domain.js";
 
 let mockUserRepository: IUserRepository;
 

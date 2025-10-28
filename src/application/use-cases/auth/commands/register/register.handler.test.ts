@@ -1,10 +1,10 @@
 import { assert, beforeEach, describe, expect, test, vi } from "vitest";
 import { RegisterCommand, makeRegisterHandler } from "./register.handler.js";
 import { makeUserRepository } from "../../../../../infra/user.repository.js";
-import { User } from "../../../../../domain/user.domain.js";
 import { matchResult } from "../../../../../shared/result.js";
 import { ERROR_CODES } from "../../../../error.code.js";
 import { crypt } from "../../../../../utils/index.js";
+import { User } from "../../../../../domain/user/user.domain.js";
 
 let mockUserRepository: ReturnType<typeof makeUserRepository>;
 
