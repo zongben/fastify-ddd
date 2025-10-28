@@ -8,10 +8,10 @@ import type {
 } from "../contract/base.contract.js";
 import { LoginSchema, type LoginReply } from "../contract/auth/login.js";
 import type { JWT } from "@fastify/jwt";
-import { matchResult } from "../application/service.response.js";
 import { ERROR_CODES } from "../application/error.code.js";
 import { AuthContext } from "../application/service.context.js";
 import { FastifyInstance } from "fastify";
+import { matchResult } from "../shared/result.js";
 
 const makeAuthController = (deps: { ctx: AuthContext; jwt: JWT }) => {
   const { ctx, jwt } = deps;

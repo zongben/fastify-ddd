@@ -3,7 +3,7 @@ import { assert, beforeEach, describe, expect, test, vi } from "vitest";
 import { RegisterCommand, makeRegisterHandler } from "./register.handler.js";
 import { Password, User } from "../../../../domain/user.domain.js";
 import { ERROR_CODES } from "../../../error.code.js";
-import { matchResult } from "../../../service.response.js";
+import { matchResult } from "../../../../shared/result.js";
 
 let mockUserRepository: ReturnType<typeof makeUserRepository>;
 

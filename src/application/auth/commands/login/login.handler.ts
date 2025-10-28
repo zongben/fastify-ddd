@@ -1,6 +1,6 @@
 import { ERROR_CODES } from "../../../error.code.js";
-import { ErrorReturn, OkReturn } from "../../../service.response.js";
 import { IUserRepository } from "../../../../infra/user.repository.js";
+import { err, ok } from "../../../../shared/result.js";
 
 export type LoginCommand = {
   account: string;
@@ -17,9 +17,9 @@ export const makeLoginHandler = (deps: { userRepository: IUserRepository }) => {
 
     const user = await userRepository.getUserByAccount(account);
     if (user == null || !user.password.matches(password)) {
-      return new ErrorReturn<LoginError>(ERROR_CODES.LOGIN_FAILED);
+      return err<LoginError>(ERROR_CODES.LOGIN_FAILED);
     }
 
-    return new OkReturn(user);
+    return ok(user);
   };
 };
