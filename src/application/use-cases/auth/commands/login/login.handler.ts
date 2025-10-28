@@ -1,6 +1,6 @@
-import { User } from "../../../../../domain/user.domain.js";
 import { IUserRepository } from "../../../../../infra/user.repository.js";
 import { err, ok } from "../../../../../shared/result.js";
+import { crypt } from "../../../../../utils/index.js";
 import { ERROR_CODES } from "../../../../error.code.js";
 
 export type LoginCommand = {
@@ -16,7 +16,7 @@ export const makeLoginHandler = (deps: { userRepository: IUserRepository }) => {
     const { account, password } = command;
 
     const user = await userRepository.getUserByAccount(account);
-    if (user == null || !User.validPassword(user, password)) {
+    if (user == null || !crypt.compare(password, user.hashedPwd)) {
       return err<LoginError>(ERROR_CODES.LOGIN_FAILED);
     }
 

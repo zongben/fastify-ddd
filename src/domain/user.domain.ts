@@ -1,5 +1,3 @@
-import { crypto } from "../utils/index.js";
-
 export type User = Readonly<{
   id: string;
   account: string;
@@ -7,18 +5,25 @@ export type User = Readonly<{
   username: string;
 }>;
 
-export const User = {
-  create: (props: {
-    id: string;
-    account: string;
-    hashedPwd: string;
-    username: string;
-  }): User => {
-    return {
-      ...props,
-    };
-  },
-  validPassword: (user: User, plain: string): boolean => {
-    return crypto.compare(plain, user.hashedPwd);
-  },
+export const createUser = (props: {
+  id: string;
+  account: string;
+  hashedPwd: string;
+  username: string;
+}): User => {
+  return {
+    ...props,
+  };
+};
+
+export const makeUserEntity = (user: User) => {
+  return {
+    value: user,
+    changeUserName: (username: string) => {
+      return makeUserEntity({
+        ...user,
+        username,
+      });
+    },
+  };
 };

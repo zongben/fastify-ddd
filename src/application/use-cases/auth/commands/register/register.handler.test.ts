@@ -4,6 +4,7 @@ import { makeUserRepository } from "../../../../../infra/user.repository.js";
 import { User } from "../../../../../domain/user.domain.js";
 import { matchResult } from "../../../../../shared/result.js";
 import { ERROR_CODES } from "../../../../error.code.js";
+import { crypt } from "../../../../../utils/index.js";
 
 let mockUserRepository: ReturnType<typeof makeUserRepository>;
 
@@ -49,8 +50,8 @@ describe("RegisterService", () => {
 
     matchResult(result, {
       ok: (v) => {
-        expect(User.validPassword(v, "password")).toBe(true);
-        expect(User.validPassword(v, "wrong")).toBe(false);
+        expect(crypt.compare("password", v.hashedPwd)).toBe(true);
+        expect(crypt.compare("wrong", v.hashedPwd)).toBe(false);
       },
       err: {
         [ERROR_CODES.ACCOUNT_IS_USED]: () => {

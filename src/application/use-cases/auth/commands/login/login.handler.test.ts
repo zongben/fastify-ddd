@@ -3,8 +3,8 @@ import { LoginCommand, makeLoginHandler } from "./login.handler.js";
 import { IUserRepository } from "../../../../../infra/user.repository.js";
 import { matchResult } from "../../../../../shared/result.js";
 import { ERROR_CODES } from "../../../../error.code.js";
-import { User } from "../../../../../domain/user.domain.js";
-import { crypto } from "../../../../../utils/index.js";
+import { createUser, User } from "../../../../../domain/user.domain.js";
+import { crypt } from "../../../../../utils/index.js";
 
 let mockUserRepository: IUserRepository;
 
@@ -35,7 +35,7 @@ describe("LoginService", () => {
 
   test("When password is wrong", async () => {
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue({
-      hashedPwd: crypto.hash("some_password"),
+      hashedPwd: crypt.hash("some_password"),
     } as User);
 
     const handler = makeLoginHandler({
@@ -58,10 +58,10 @@ describe("LoginService", () => {
   });
 
   test("Success", async () => {
-    const mockUser = User.create({
+    const mockUser = createUser({
       id: "",
       account: "",
-      hashedPwd: crypto.hash("some_password"),
+      hashedPwd: crypt.hash("some_password"),
       username: "",
     });
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(mockUser);
