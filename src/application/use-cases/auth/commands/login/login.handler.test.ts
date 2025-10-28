@@ -3,7 +3,8 @@ import { LoginCommand, makeLoginHandler } from "./login.handler.js";
 import { IUserRepository } from "../../../../../infra/user.repository.js";
 import { matchResult } from "../../../../../shared/result.js";
 import { ERROR_CODES } from "../../../../error.code.js";
-import { Password, User } from "../../../../../domain/user.domain.js";
+import { User } from "../../../../../domain/user.domain.js";
+import { crypto } from "../../../../../utils/index.js";
 
 let mockUserRepository: IUserRepository;
 
@@ -34,7 +35,7 @@ describe("LoginService", () => {
 
   test("When password is wrong", async () => {
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue({
-      password: Password.create("some_password"),
+      hashedPwd: crypto.hash("some_password"),
     } as User);
 
     const handler = makeLoginHandler({
@@ -57,10 +58,10 @@ describe("LoginService", () => {
   });
 
   test("Success", async () => {
-    const mockUser = new User({
+    const mockUser = User.create({
       id: "",
       account: "",
-      password: Password.create("some_password"),
+      hashedPwd: crypto.hash("some_password"),
       username: "",
     });
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(mockUser);

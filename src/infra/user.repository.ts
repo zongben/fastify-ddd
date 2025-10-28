@@ -1,5 +1,5 @@
 import { type FastifyMongoObject } from "@fastify/mongodb";
-import { Password, User } from "../domain/user.domain.js";
+import { User } from "../domain/user.domain.js";
 import { UserSchema } from "./schema/user.js";
 import { COLLECTIONS } from "./schema/collections.js";
 
@@ -19,7 +19,7 @@ export const makeUserRepository = (deps: {
       await users?.insertOne({
         _id: user.id,
         account: user.account,
-        password: user.password.hash,
+        password: user.hashedPwd,
         username: user.username,
       });
       return user;
@@ -32,10 +32,10 @@ export const makeUserRepository = (deps: {
 
       if (!user) return null;
 
-      return new User({
+      return User.create({
         id: user._id,
         account: user.account,
-        password: Password.fromHash(user.password),
+        hashedPwd: user.password,
         username: user.username,
       });
     },

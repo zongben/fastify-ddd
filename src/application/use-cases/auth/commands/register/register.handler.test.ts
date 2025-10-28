@@ -1,7 +1,7 @@
 import { assert, beforeEach, describe, expect, test, vi } from "vitest";
 import { RegisterCommand, makeRegisterHandler } from "./register.handler.js";
 import { makeUserRepository } from "../../../../../infra/user.repository.js";
-import { Password, User } from "../../../../../domain/user.domain.js";
+import { User } from "../../../../../domain/user.domain.js";
 import { matchResult } from "../../../../../shared/result.js";
 import { ERROR_CODES } from "../../../../error.code.js";
 
@@ -49,8 +49,8 @@ describe("RegisterService", () => {
 
     matchResult(result, {
       ok: (v) => {
-        expect(v).instanceof(User);
-        expect(v.password).toEqual(Password.fromHash(v.password.hash));
+        expect(User.validPassword(v, "password")).toBe(true);
+        expect(User.validPassword(v, "wrong")).toBe(false);
       },
       err: {
         [ERROR_CODES.ACCOUNT_IS_USED]: () => {
