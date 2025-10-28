@@ -5,13 +5,13 @@ import {
 import { LoginSchema, type LoginReply } from "../contract/auth/login.js";
 import type { JWT } from "@fastify/jwt";
 import { ERROR_CODES } from "../application/error.code.js";
-import { AuthUseCases } from "../application/service.context.js";
 import { FastifyInstance } from "fastify";
 import { matchResult } from "../shared/result.js";
 import {
   FastifyReplyTypeBox,
   FastifyRequestTypeBox,
 } from "../contract/index.js";
+import { AuthUseCases } from "../application/use-case.context.js";
 
 const makeAuthController = (deps: { uc: AuthUseCases; jwt: JWT }) => {
   const { uc, jwt } = deps;
