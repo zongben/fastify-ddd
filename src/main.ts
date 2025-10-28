@@ -9,8 +9,8 @@ import jwt from "@fastify/jwt";
 import { initMongoIndexes } from "./infra/schema/collections.js";
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
-import { repositoryContext } from "./infra/repository.context.js";
-import { serviceContext } from "./application/service.context.js";
+import { makeRepositoryContext } from "./infra/repository.context.js";
+import { makeUseCaseContext } from "./application/service.context.js";
 import { registerRoutes } from "./controller/routes.js";
 import { replyHttpPlugin } from "./shared/reply.extend.js";
 
@@ -87,10 +87,10 @@ fastify.register(replyHttpPlugin);
 
 fastify.register(
   (instance) => {
-    const svcCtx = serviceContext({
-      repoCtx: repositoryContext({ mongo: fastify.mongo }),
+    const ctx = makeUseCaseContext({
+      repoCtx: makeRepositoryContext({ mongo: fastify.mongo }),
     });
-    registerRoutes({ ctx: svcCtx })(instance);
+    registerRoutes({ ctx })(instance);
   },
   { prefix: "/api" },
 );

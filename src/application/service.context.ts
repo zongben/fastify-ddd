@@ -3,18 +3,18 @@ import { makeLoginHandler } from "./auth/commands/login/login.handler.js";
 import { RepositoryContext } from "../infra/repository.context.js";
 import { IUserRepository } from "../infra/user.repository.js";
 
-const authHandlers = (deps: { userRepository: IUserRepository }) => ({
+const makeAuthUseCases = (deps: { userRepository: IUserRepository }) => ({
   register: makeRegisterHandler(deps),
   login: makeLoginHandler(deps),
 });
 
-export const serviceContext = (deps: { repoCtx: RepositoryContext }) => {
+export const makeUseCaseContext = (deps: { repoCtx: RepositoryContext }) => {
   const { repoCtx } = deps;
 
   return {
-    auth: authHandlers({ userRepository: repoCtx.userRepository }),
+    auth: makeAuthUseCases({ userRepository: repoCtx.userRepository }),
   };
 };
 
-export type ServiceContext = ReturnType<typeof serviceContext>;
-export type AuthContext = ReturnType<typeof authHandlers>;
+export type UseCaseContext = ReturnType<typeof makeUseCaseContext>;
+export type AuthUseCases = ReturnType<typeof makeAuthUseCases>;
