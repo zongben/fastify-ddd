@@ -27,9 +27,9 @@ const makeAuthController = (deps: { uc: AuthUseCases; jwt: JWT }) => {
         account,
         password,
       });
-      return matchResult(result, {
+      matchResult(result, {
         ok: (v) => {
-          return reply.OK<LoginReply>({
+          reply.OK<LoginReply>({
             token: jwt.sign({
               id: v.id,
               account: v.account,
@@ -38,7 +38,7 @@ const makeAuthController = (deps: { uc: AuthUseCases; jwt: JWT }) => {
         },
         err: {
           [ERROR_CODES.LOGIN_FAILED]: (e) => {
-            return reply.Unauthorized(e);
+            reply.Unauthorized(e);
           },
         },
       });
@@ -55,17 +55,17 @@ const makeAuthController = (deps: { uc: AuthUseCases; jwt: JWT }) => {
         username,
       });
 
-      return matchResult(result, {
+      matchResult(result, {
         ok: (v) => {
           const { id, account } = v;
-          return reply.OK<RegisterReply>({
+          reply.OK<RegisterReply>({
             id,
             account,
           });
         },
         err: {
           [ERROR_CODES.ACCOUNT_IS_USED]: (e) => {
-            return reply.Conflict(e);
+            reply.Conflict(e);
           },
         },
       });
