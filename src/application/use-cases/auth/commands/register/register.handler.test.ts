@@ -46,7 +46,7 @@ describe("RegisterService", () => {
       password: "password",
     } as RegisterCommand);
 
-    expect(result.isSuccess).toEqual(true);
+    expect(result.ok).toEqual(true);
 
     matchResult(result, {
       ok: (v) => {

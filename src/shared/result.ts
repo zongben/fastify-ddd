@@ -1,18 +1,18 @@
 export type OkResult<T> = {
-  isSuccess: true;
+  ok: true;
   data: T;
 };
 
 export type ErrorResult<E> = {
-  isSuccess: false;
+  ok: false;
   error: E;
 };
 
 export type OneOf<T, E> = OkResult<T> | ErrorResult<E>;
 
-export const ok = <T>(data: T): OkResult<T> => ({ isSuccess: true, data });
+export const ok = <T>(data: T): OkResult<T> => ({ ok: true, data });
 export const err = <E>(error: E): ErrorResult<E> => ({
-  isSuccess: false,
+  ok: false,
   error,
 });
 
@@ -23,7 +23,7 @@ export const matchResult = <T, E extends string | number | symbol, R>(
     err: Record<E, (error: E) => R>;
   },
 ): R => {
-  if (result.isSuccess) {
+  if (result.ok) {
     return handlers.ok(result.data);
   }
   const handler = handlers.err[result.error];
