@@ -4,7 +4,6 @@ import {
 } from "../contract/auth/register.js";
 import { LoginSchema, type LoginReply } from "../contract/auth/login.js";
 import type { JWT } from "@fastify/jwt";
-import { ERROR_CODES } from "../application/error.code.js";
 import { FastifyInstance } from "fastify";
 import { matchResult } from "../shared/result.js";
 import {
@@ -12,6 +11,7 @@ import {
   FastifyRequestTypeBox,
 } from "../contract/index.js";
 import { AuthUseCases } from "../application/use-cases/use-case.context.js";
+import { handleError } from "./error.handler.js";
 
 const makeAuthController = (deps: { uc: AuthUseCases; jwt: JWT }) => {
   const { uc, jwt } = deps;
@@ -29,18 +29,14 @@ const makeAuthController = (deps: { uc: AuthUseCases; jwt: JWT }) => {
       });
       matchResult(result, {
         ok: (v) => {
-          reply.OK<LoginReply>({
+          return reply.OK<LoginReply>({
             token: jwt.sign({
               id: v.id,
               account: v.account,
             }),
           });
         },
-        err: {
-          [ERROR_CODES.LOGIN_FAILED]: (e) => {
-            reply.Unauthorized(e);
-          },
-        },
+        err: handleError(reply)
       });
     },
     register: async (
@@ -58,16 +54,12 @@ const makeAuthController = (deps: { uc: AuthUseCases; jwt: JWT }) => {
       matchResult(result, {
         ok: (v) => {
           const { id, account } = v;
-          reply.OK<RegisterReply>({
+          return reply.OK<RegisterReply>({
             id,
             account,
           });
         },
-        err: {
-          [ERROR_CODES.ACCOUNT_IS_USED]: (e) => {
-            reply.Conflict(e);
-          },
-        },
+        err: handleError(reply),
       });
     },
   };
