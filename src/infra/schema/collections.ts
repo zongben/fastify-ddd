@@ -1,10 +1,10 @@
-import { FastifyMongoObject } from "@fastify/mongodb";
 import { createUserIndex } from "./user.js";
+import { MongoDb } from "../../shared/mongo.js";
 
 export enum COLLECTIONS {
   USERS = "users",
 }
 
-export const initMongoIndexes = async (mongo: FastifyMongoObject) => {
-  await createUserIndex(mongo);
+export const initMongoIndexes = async (db: MongoDb) => {
+  await createUserIndex(db);
 };

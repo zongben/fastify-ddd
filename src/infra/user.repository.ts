@@ -1,22 +1,20 @@
-import { type FastifyMongoObject } from "@fastify/mongodb";
 import { UserSchema } from "./schema/user.js";
 import { COLLECTIONS } from "./schema/collections.js";
 import { createUser, User } from "../domain/user/user.domain.js";
+import { MongoDb } from "../shared/mongo.js";
 
 export interface IUserRepository {
   createUser(user: User): Promise<User>;
   getUserByAccount(account: string): Promise<User | null>;
 }
 
-export const makeUserRepository = (deps: {
-  mongo: FastifyMongoObject;
-}): IUserRepository => {
-  const { mongo } = deps;
+export const makeUserRepository = (deps: { db: MongoDb }): IUserRepository => {
+  const { db } = deps;
 
   return {
     createUser: async (user: User) => {
-      const users = mongo.db?.collection<UserSchema>(COLLECTIONS.USERS);
-      await users?.insertOne({
+      const users = db.collection<UserSchema>(COLLECTIONS.USERS);
+      await users.insertOne({
         _id: user.id,
         account: user.account,
         password: user.hashedPwd,
@@ -25,7 +23,7 @@ export const makeUserRepository = (deps: {
       return user;
     },
     getUserByAccount: async (account: string) => {
-      const users = mongo.db?.collection<UserSchema>(COLLECTIONS.USERS);
+      const users = db.collection<UserSchema>(COLLECTIONS.USERS);
       const user = await users?.findOne({
         account,
       });

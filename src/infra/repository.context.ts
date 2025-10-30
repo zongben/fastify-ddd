@@ -1,7 +1,7 @@
-import { FastifyMongoObject } from "@fastify/mongodb";
 import { makeUserRepository } from "./user.repository.js";
+import { MongoDb } from "../shared/mongo.js";
 
-export const makeRepositoryContext = (deps: { mongo: FastifyMongoObject }) => {
+export const makeRepositoryContext = (deps: { db: MongoDb }) => {
   return {
     userRepository: makeUserRepository(deps),
   };

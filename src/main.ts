@@ -13,6 +13,7 @@ import { makeRepositoryContext } from "./infra/repository.context.js";
 import { registerRoutes } from "./controller/routes.js";
 import { replyHttpPlugin } from "./shared/reply.extend.js";
 import { makeUseCaseContext } from "./application/use-cases/use-case.context.js";
+import { makeMongoDb } from "./shared/mongo.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -73,7 +74,7 @@ fastify.register(mongodb, {
 });
 
 fastify.after(async () => {
-  initMongoIndexes(fastify.mongo);
+  initMongoIndexes(makeMongoDb(fastify.mongo));
 });
 
 fastify.register(jwt, {
@@ -88,7 +89,7 @@ fastify.register(replyHttpPlugin);
 fastify.register(
   (instance) => {
     const ctx = makeUseCaseContext({
-      repoCtx: makeRepositoryContext({ mongo: fastify.mongo }),
+      repoCtx: makeRepositoryContext({ db: makeMongoDb(fastify.mongo) }),
     });
     registerRoutes({ ctx })(instance);
   },
