@@ -18,7 +18,7 @@ export const createUser = (props: {
 
 export const makeUserEntity = (user: User) => {
   return {
-    value: user,
+    value: () => user,
     changeUserName: (username: string) => {
       return makeUserEntity({
         ...user,

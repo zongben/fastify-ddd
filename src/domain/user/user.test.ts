@@ -13,6 +13,6 @@ describe("User domain", () => {
 
     const entity = makeUserEntity(mockUser).changeUserName("new_username");
 
-    expect(entity.value.username).toBe("new_username");
+    expect(entity.value().username).toBe("new_username");
   });
 });
