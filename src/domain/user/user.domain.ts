@@ -5,7 +5,7 @@ export type User = Readonly<{
   username: string;
 }>;
 
-export const createUser = (props: {
+export const makeUser = (props: {
   id: string;
   account: string;
   hashedPwd: string;

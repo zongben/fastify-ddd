@@ -1,10 +1,10 @@
 import { describe, expect, test } from "vitest";
-import { createUser, makeUserEntity } from "./user.domain.js";
+import { makeUser, makeUserEntity } from "./user.domain.js";
 import { crypt, uuid } from "../../utils/index.js";
 
 describe("User domain", () => {
   test("ChangeUserName", () => {
-    const mockUser = createUser({
+    const mockUser = makeUser({
       id: uuid(),
       account: "account",
       hashedPwd: crypt.hash("some_password"),

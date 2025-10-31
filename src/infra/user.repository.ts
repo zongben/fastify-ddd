@@ -1,6 +1,6 @@
 import { UserSchema } from "./schema/user.js";
 import { COLLECTIONS } from "./schema/collections.js";
-import { createUser, User } from "../domain/user/user.domain.js";
+import { makeUser, User } from "../domain/user/user.domain.js";
 import { MongoDb } from "../shared/mongo.js";
 
 export interface IUserRepository {
@@ -30,7 +30,7 @@ export const makeUserRepository = (deps: { db: MongoDb }): IUserRepository => {
 
       if (!user) return null;
 
-      return createUser({
+      return makeUser({
         id: user._id,
         account: user.account,
         hashedPwd: user.password,

@@ -4,7 +4,7 @@ import { IUserRepository } from "../../../../../infra/user.repository.js";
 import { matchResult } from "../../../../../shared/result.js";
 import { ERROR_CODES } from "../../../../error.code.js";
 import { crypt } from "../../../../../utils/index.js";
-import { createUser, User } from "../../../../../domain/user/user.domain.js";
+import { makeUser, User } from "../../../../../domain/user/user.domain.js";
 
 let mockUserRepository: IUserRepository;
 
@@ -58,7 +58,7 @@ describe("LoginService", () => {
   });
 
   test("Success", async () => {
-    const mockUser = createUser({
+    const mockUser = makeUser({
       id: "",
       account: "",
       hashedPwd: crypt.hash("some_password"),

@@ -2,7 +2,7 @@ import { ERROR_CODES } from "../../../../error.code.js";
 import { IUserRepository } from "../../../../../infra/user.repository.js";
 import { err, ok } from "../../../../../shared/result.js";
 import { crypt, uuid } from "../../../../../utils/index.js";
-import { createUser } from "../../../../../domain/user/user.domain.js";
+import { makeUser } from "../../../../../domain/user/user.domain.js";
 
 export type RegisterCommand = {
   account: string;
@@ -24,7 +24,7 @@ export const makeRegisterHandler = (deps: {
       return err<RegisterError>(ERROR_CODES.ACCOUNT_IS_USED);
     }
 
-    const user = createUser({
+    const user = makeUser({
       id: uuid(),
       account: command.account,
       hashedPwd: crypt.hash(command.password),
