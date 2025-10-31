@@ -24,7 +24,7 @@ export const makeUserRepository = (deps: { db: MongoDb }): IUserRepository => {
     },
     getUserByAccount: async (account: string) => {
       const users = db.collection<UserSchema>(COLLECTIONS.USERS);
-      const user = await users?.findOne({
+      const user = await users.findOne({
         account,
       });
 
