@@ -39,7 +39,7 @@ await fastify.register(fastifyEnv, {
     },
   },
   dotenv: {
-    path: `${__dirname}/.env.example`,
+    path: `${__dirname}/.env`,
   },
 });
 
@@ -90,6 +90,7 @@ fastify.register(
   (instance) => {
     const ctx = makeUseCaseContext({
       repoCtx: makeRepositoryContext({ db: makeMongoDb(fastify.mongo) }),
+      jwt: instance.jwt
     });
     registerRoutes({ ctx })(instance);
   },

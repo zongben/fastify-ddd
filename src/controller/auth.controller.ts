@@ -3,7 +3,6 @@ import {
   type RegisterReply,
 } from "../contract/auth/register.js";
 import { LoginSchema, type LoginReply } from "../contract/auth/login.js";
-import type { JWT } from "@fastify/jwt";
 import { FastifyInstance } from "fastify";
 import { matchResult } from "../shared/result.js";
 import {
@@ -13,8 +12,8 @@ import {
 import { AuthUseCases } from "../application/use-cases/use-case.context.js";
 import { handleError } from "./error.handler.js";
 
-const makeAuthController = (deps: { uc: AuthUseCases; jwt: JWT }) => {
-  const { uc, jwt } = deps;
+const makeAuthController = (deps: { uc: AuthUseCases; }) => {
+  const { uc } = deps;
 
   return {
     login: async (
@@ -30,10 +29,7 @@ const makeAuthController = (deps: { uc: AuthUseCases; jwt: JWT }) => {
       matchResult(result, {
         ok: (v) => {
           return reply.OK<LoginReply>({
-            token: jwt.sign({
-              id: v.id,
-              account: v.account,
-            }),
+            token: v.token
           });
         },
         err: handleError(reply)
@@ -69,7 +65,6 @@ export const makeAuthRoutes =
   (deps: { uc: AuthUseCases }) => (fastify: FastifyInstance) => {
     const auth = makeAuthController({
       ...deps,
-      jwt: fastify.jwt,
     });
     fastify.register(
       (instance) => {

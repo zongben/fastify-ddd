@@ -1,3 +1,4 @@
+import { JWT } from "@fastify/jwt";
 import { IUserRepository } from "../../../../../infra/user.repository.js";
 import { err, ok } from "../../../../../shared/result.js";
 import { crypt } from "../../../../../utils/index.js";
@@ -10,8 +11,8 @@ export type LoginCommand = {
 
 export type LoginError = ERROR_CODES.LOGIN_FAILED;
 
-export const makeLoginHandler = (deps: { userRepository: IUserRepository }) => {
-  const { userRepository } = deps;
+export const makeLoginHandler = (deps: { userRepository: IUserRepository, jwt: JWT }) => {
+  const { userRepository, jwt } = deps;
   return async (command: LoginCommand) => {
     const { account, password } = command;
 
@@ -20,6 +21,11 @@ export const makeLoginHandler = (deps: { userRepository: IUserRepository }) => {
       return err<LoginError>(ERROR_CODES.LOGIN_FAILED);
     }
 
-    return ok(user);
+    var token = jwt.sign({
+      id: user.id,
+      account: user.account,
+    })
+
+    return ok({ token });
   };
 };
