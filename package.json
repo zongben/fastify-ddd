@@ -14,20 +14,20 @@
     "@fastify/helmet": "^13.0.2",
     "@fastify/jwt": "^10.0.0",
     "@fastify/mongodb": "^9.0.2",
-    "@fastify/swagger": "^9.5.2",
+    "@fastify/swagger": "^9.6.1",
     "@fastify/swagger-ui": "^5.2.3",
     "@fastify/type-provider-typebox": "^6.1.0",
     "bcrypt": "^6.0.0",
-    "fastify": "^5.6.1",
-    "typebox": "^1.0.51",
+    "fastify": "^5.6.2",
+    "typebox": "^1.0.61",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
-    "@types/node": "^24.10.0",
-    "@vitest/coverage-v8": "^4.0.7",
-    "nodemon": "^3.1.10",
+    "@types/node": "^24.10.1",
+    "@vitest/coverage-v8": "^4.0.15",
+    "nodemon": "^3.1.11",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.7"
+    "vitest": "^4.0.15"
   }
 }
