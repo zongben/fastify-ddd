@@ -27,7 +27,7 @@ export const makeRegisterHandler = (deps: {
     const user = makeUser({
       id: uuid(),
       account: command.account,
-      hashedPwd: crypt.hash(command.password),
+      hashedPwd: await crypt.hash(command.password),
       username: command.username,
     });
     await userRepository.createUser(user);

@@ -17,7 +17,7 @@ export const makeLoginHandler = (deps: { userRepository: IUserRepository, tokenS
     const { account, password } = command;
 
     const user = await userRepository.getUserByAccount(account);
-    if (user == null || !crypt.compare(password, user.hashedPwd)) {
+    if (user == null || !await crypt.compare(password, user.hashedPwd)) {
       return err<LoginError>(ERROR_CODES.LOGIN_FAILED);
     }
 

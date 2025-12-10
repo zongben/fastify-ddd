@@ -49,9 +49,9 @@ describe("RegisterService", () => {
     expect(result.ok).toEqual(true);
 
     matchResult(result, {
-      ok: (v) => {
-        expect(crypt.compare("password", v.hashedPwd)).toBe(true);
-        expect(crypt.compare("wrong", v.hashedPwd)).toBe(false);
+      ok: async (v) => {
+        expect(await crypt.compare("password", v.hashedPwd)).toBe(true);
+        expect(await crypt.compare("wrong", v.hashedPwd)).toBe(false);
       },
       err: {
         [ERROR_CODES.ACCOUNT_IS_USED]: () => {

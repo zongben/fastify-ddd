@@ -39,7 +39,7 @@ describe("LoginService", () => {
 
   test("When password is wrong", async () => {
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue({
-      hashedPwd: crypt.hash("some_password"),
+      hashedPwd: await crypt.hash("some_password"),
     } as User);
 
     const handler = makeLoginHandler({
@@ -66,7 +66,7 @@ describe("LoginService", () => {
     const mockUser = makeUser({
       id: "",
       account: "",
-      hashedPwd: crypt.hash("some_password"),
+      hashedPwd: await crypt.hash("some_password"),
       username: "",
     });
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(mockUser);
