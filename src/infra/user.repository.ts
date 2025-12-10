@@ -2,11 +2,7 @@ import { UserSchema } from "./schema/user.js";
 import { COLLECTIONS } from "./schema/collections.js";
 import { makeUser, User } from "../domain/user/user.domain.js";
 import { MongoDb } from "../shared/mongo.js";
-
-export interface IUserRepository {
-  createUser(user: User): Promise<User>;
-  getUserByAccount(account: string): Promise<User | null>;
-}
+import { IUserRepository } from "../application/repositories/index.js";
 
 export const makeUserRepository = (deps: { db: MongoDb }): IUserRepository => {
   const { db } = deps;
