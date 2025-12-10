@@ -1,8 +1,8 @@
 import { ERROR_CODES } from "../../../../error.code.js";
-import { IUserRepository } from "../../../../../infra/user.repository.js";
 import { err, ok } from "../../../../../shared/result.js";
 import { crypt, uuid } from "../../../../../utils/index.js";
 import { makeUser } from "../../../../../domain/user/user.domain.js";
+import { IUserRepository } from "../../../../repositories/index.js";
 
 export type RegisterCommand = {
   account: string;
