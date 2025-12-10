@@ -2,18 +2,18 @@ import { makeRegisterHandler } from "./auth/commands/register/register.handler.j
 import { makeLoginHandler } from "./auth/commands/login/login.handler.js";
 import { IUserRepository } from "../../infra/user.repository.js";
 import { RepositoryContext } from "../../infra/repository.context.js";
-import { JWT } from "@fastify/jwt";
+import { ITokenService } from "../../services/index.js";
 
-const makeAuthUseCases = (deps: { userRepository: IUserRepository, jwt: JWT }) => ({
+const makeAuthUseCases = (deps: { userRepository: IUserRepository, tokenService: ITokenService }) => ({
   register: makeRegisterHandler(deps),
   login: makeLoginHandler(deps),
 });
 
-export const makeUseCaseContext = (deps: { repoCtx: RepositoryContext, jwt: JWT }) => {
-  const { repoCtx, jwt } = deps;
+export const makeUseCaseContext = (deps: { repoCtx: RepositoryContext, tokenService: ITokenService }) => {
+  const { repoCtx, tokenService } = deps;
 
   return {
-    auth: makeAuthUseCases({ userRepository: repoCtx.userRepository, jwt }),
+    auth: makeAuthUseCases({ userRepository: repoCtx.userRepository, tokenService }),
   };
 };
 

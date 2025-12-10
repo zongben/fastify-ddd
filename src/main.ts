@@ -14,6 +14,7 @@ import { registerRoutes } from "./controller/routes.js";
 import { replyHttpPlugin } from "./shared/reply.extend.js";
 import { makeUseCaseContext } from "./application/use-cases/use-case.context.js";
 import { makeMongoDb } from "./shared/mongo.js";
+import { makeTokenService } from "./services/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -90,7 +91,7 @@ fastify.register(
   (instance) => {
     const ctx = makeUseCaseContext({
       repoCtx: makeRepositoryContext({ db: makeMongoDb(fastify.mongo) }),
-      jwt: instance.jwt
+      tokenService: makeTokenService(instance.jwt)
     });
     registerRoutes({ ctx })(instance);
   },
