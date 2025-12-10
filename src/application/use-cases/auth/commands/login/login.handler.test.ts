@@ -1,19 +1,19 @@
 import { beforeEach, describe, expect, test, vi, assert } from "vitest";
 import { LoginCommand, makeLoginHandler } from "./login.handler.js";
-import { IUserRepository } from "../../../../../infra/user.repository.js";
 import { matchResult } from "../../../../../shared/result.js";
 import { ERROR_CODES } from "../../../../error.code.js";
 import { crypt } from "../../../../../utils/index.js";
 import { makeUser, User } from "../../../../../domain/user/user.domain.js";
-import { JWT } from "@fastify/jwt";
+import { IUserRepository } from "../../../../repositories/index.js";
+import { ITokenService } from "../../../../../services/index.js";
 
 let mockUserRepository: IUserRepository;
-let mockJWT: JWT
+let mockTokenService: ITokenService
 
 describe("LoginService", () => {
   beforeEach(() => {
     mockUserRepository = {} as IUserRepository;
-    mockJWT = {} as JWT;
+    mockTokenService = {} as ITokenService;
   });
 
   test("When user not found", async () => {
@@ -21,7 +21,7 @@ describe("LoginService", () => {
 
     const handler = makeLoginHandler({
       userRepository: mockUserRepository,
-      jwt: mockJWT
+      tokenService: mockTokenService
     });
     const result = await handler({} as LoginCommand);
 
@@ -44,7 +44,7 @@ describe("LoginService", () => {
 
     const handler = makeLoginHandler({
       userRepository: mockUserRepository,
-      jwt: mockJWT
+      tokenService: mockTokenService
     });
     const result = await handler({
       password: "worng_password",
@@ -70,11 +70,11 @@ describe("LoginService", () => {
       username: "",
     });
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(mockUser);
-    mockJWT.sign = vi.fn(() => "token")
+    mockTokenService.sign = vi.fn(() => "token")
 
     const handler = makeLoginHandler({
       userRepository: mockUserRepository,
-      jwt: mockJWT
+      tokenService: mockTokenService
     });
     const result = await handler({
       password: "some_password",
