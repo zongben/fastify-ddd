@@ -8,7 +8,7 @@ import { User } from "../../../../../domain/user/user.domain.js";
 
 let mockUserRepository: ReturnType<typeof makeUserRepository>;
 
-describe("RegisterService", () => {
+describe("RegisterHandler", () => {
   beforeEach(() => {
     mockUserRepository = {} as ReturnType<typeof makeUserRepository>;
   });

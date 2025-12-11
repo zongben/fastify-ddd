@@ -10,7 +10,7 @@ import { ITokenService } from "../../../../../services/index.js";
 let mockUserRepository: IUserRepository;
 let mockTokenService: ITokenService
 
-describe("LoginService", () => {
+describe("LoginHandler", () => {
   beforeEach(() => {
     mockUserRepository = {} as IUserRepository;
     mockTokenService = {} as ITokenService;
