@@ -2,7 +2,7 @@ import { ITokenService } from "../../../../../services/index.js";
 import { err, ok } from "../../../../../shared/result.js";
 import { crypt } from "../../../../../utils/index.js";
 import { ERROR_CODES } from "../../../../error.code.js";
-import { IUserRepository } from "../../../../repositories/index.js";
+import { IUserRepository } from "../../../../persistences/index.js";
 
 export type LoginCommand = {
   account: string;

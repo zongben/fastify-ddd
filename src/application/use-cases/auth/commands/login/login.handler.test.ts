@@ -4,7 +4,7 @@ import { matchResult } from "../../../../../shared/result.js";
 import { ERROR_CODES } from "../../../../error.code.js";
 import { crypt } from "../../../../../utils/index.js";
 import { makeUser, User } from "../../../../../domain/user/user.domain.js";
-import { IUserRepository } from "../../../../repositories/index.js";
+import { IUserRepository } from "../../../../persistences/index.js";
 import { ITokenService } from "../../../../../services/index.js";
 
 let mockUserRepository: IUserRepository;
