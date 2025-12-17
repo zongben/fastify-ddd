@@ -1,33 +1,33 @@
-import { UserSchema } from "./schema/user.js";
-import { COLLECTIONS } from "./schema/collections.js";
 import { makeUser, User } from "../domain/user/user.domain.js";
-import { MongoDb } from "../shared/mongo.js";
 import { IUserRepository } from "../application/persistences/index.js";
+import { DbClient } from "../shared/prisma.js";
 
-export const makeUserRepository = (deps: { db: MongoDb }): IUserRepository => {
+export const makeUserRepository = (deps: { db: DbClient }): IUserRepository => {
   const { db } = deps;
 
   return {
     createUser: async (user: User) => {
-      const users = db.collection<UserSchema>(COLLECTIONS.USERS);
-      await users.insertOne({
-        _id: user.id,
-        account: user.account,
-        password: user.hashedPwd,
-        username: user.username,
+      await db.user.create({
+        data: {
+          id: user.id,
+          account: user.account,
+          password: user.hashedPwd,
+          username: user.username,
+        },
       });
       return user;
     },
     getUserByAccount: async (account: string) => {
-      const users = db.collection<UserSchema>(COLLECTIONS.USERS);
-      const user = await users.findOne({
-        account,
+      const user = await db.user.findUnique({
+        where: {
+          account,
+        },
       });
 
       if (!user) return null;
 
       return makeUser({
-        id: user._id,
+        id: user.id,
         account: user.account,
         hashedPwd: user.password,
         username: user.username,

@@ -1,20 +1,18 @@
 import Fastify from "fastify";
 import fastifyEnv from "@fastify/env";
 import type { Env } from "./controller/env.js";
-import mongodb from "@fastify/mongodb";
 import type { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
 import jwt from "@fastify/jwt";
-import { initMongoIndexes } from "./infra/schema/collections.js";
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
 import { makeRepositoryContext } from "./infra/repository.context.js";
 import { registerRoutes } from "./controller/routes.js";
 import { replyHttpPlugin } from "./shared/reply.extend.js";
 import { makeUseCaseContext } from "./application/use-cases/use-case.context.js";
-import { makeMongoDb } from "./shared/mongo.js";
 import { makeTokenService } from "./services/index.js";
+import { makePrisma } from "./shared/prisma.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,15 +24,12 @@ const fastify = Fastify({
 await fastify.register(fastifyEnv, {
   schema: {
     type: "object",
-    required: ["MONGO_URL", "JWT_KEY"],
+    required: ["DATABASE_URL", "JWT_KEY"],
     properties: {
-      MONGO_URL: {
+      DATABASE_URL: {
         type: "string",
       },
       JWT_KEY: {
-        type: "string",
-      },
-      NODE_ENV: {
         type: "string",
       },
     },
@@ -69,15 +64,6 @@ await fastify.register(swaggerUI, {
 
 const env = fastify.getEnvs<Env>();
 
-fastify.register(mongodb, {
-  forceClose: true,
-  url: env.MONGO_URL,
-});
-
-fastify.after(async () => {
-  initMongoIndexes(makeMongoDb(fastify.mongo));
-});
-
 fastify.register(jwt, {
   secret: env.JWT_KEY,
   sign: {
@@ -90,8 +76,8 @@ fastify.register(replyHttpPlugin);
 fastify.register(
   (instance) => {
     const ctx = makeUseCaseContext({
-      repoCtx: makeRepositoryContext({ db: makeMongoDb(fastify.mongo) }),
-      tokenService: makeTokenService(instance.jwt)
+      repoCtx: makeRepositoryContext({ db: makePrisma(env.DATABASE_URL) }),
+      tokenService: makeTokenService(instance.jwt),
     });
     registerRoutes({ ctx })(instance);
   },
