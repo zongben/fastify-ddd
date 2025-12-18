@@ -75,10 +75,20 @@ fastify.register(jwt, {
 fastify.register(replyHttpPlugin);
 
 fastify.setErrorHandler((err: FastifyError, _, reply) => {
-  reply.status(err.statusCode ?? 500).send({
+  const statusCode = err.statusCode ?? 500;
+
+  if (statusCode >= 500) {
+    fastify.log.error(err);
+    return reply.status(statusCode).send({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Internal Server Error",
+    } satisfies Err);
+  }
+
+  return reply.status(statusCode).send({
     code: err.code,
     message: err.message,
-  } as Err);
+  } satisfies Err);
 });
 
 fastify.register(
