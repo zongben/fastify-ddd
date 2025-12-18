@@ -1,4 +1,5 @@
 import {
+  registerPreValidation,
   RegisterSchema,
   type RegisterReply,
 } from "../contract/auth/register.js";
@@ -69,7 +70,11 @@ export const makeAuthRoutes =
     fastify.register(
       (instance) => {
         instance.post("/login", { schema: LoginSchema }, auth.login);
-        instance.post("/register", { schema: RegisterSchema }, auth.register);
+        instance.post(
+          "/register",
+          { schema: RegisterSchema, preValidation: registerPreValidation },
+          auth.register,
+        );
       },
       { prefix: "/auth" },
     );
