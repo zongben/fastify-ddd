@@ -6,26 +6,18 @@ import { UseCaseContext } from "../application/use-cases/use-case.context.js";
 const anonymousRoutes =
   (deps: { ctx: UseCaseContext }) => (fastify: FastifyInstance) => {
     const { ctx } = deps;
-    fastify.register((instance) => {
-      makeAuthRoutes({ uc: ctx.auth })(instance);
-    });
+    makeAuthRoutes({ uc: ctx.auth })(fastify);
   };
 
 const jwtAuthRoutes = () => (fastify: FastifyInstance) => {
-  fastify.register((instance) => {
-    instance.addHook("onRequest", async (req, reply) => {
-      try {
-        await req.jwtVerify();
-      } catch (err) {
-        reply.status(401).send(err);
-      }
-    });
-    makeUserRoutes()(instance);
+  fastify.addHook("onRequest", async (req) => {
+    await req.jwtVerify();
   });
+  makeUserRoutes()(fastify);
 };
 
 export const registerRoutes =
   (deps: { ctx: UseCaseContext }) => (fastify: FastifyInstance) => {
-    anonymousRoutes(deps)(fastify);
-    jwtAuthRoutes()(fastify);
+    fastify.register(anonymousRoutes(deps));
+    fastify.register(jwtAuthRoutes());
   };
