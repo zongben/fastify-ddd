@@ -1,7 +1,7 @@
 {
   "name": "fastify-ddd",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.json",
     "test": "vitest run --coverage",
     "start": "tsx watch ./src/main.ts"
   },
