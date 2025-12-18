@@ -1,4 +1,4 @@
-import Fastify from "fastify";
+import Fastify, { FastifyError } from "fastify";
 import fastifyEnv from "@fastify/env";
 import type { Env } from "./controller/env.js";
 import type { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
@@ -72,6 +72,13 @@ fastify.register(jwt, {
 });
 
 fastify.register(replyHttpPlugin);
+
+fastify.setErrorHandler((err: FastifyError, _, reply) => {
+  reply.status(err.statusCode ?? 500).send({
+    code: err.code,
+    message: err.message,
+  });
+});
 
 fastify.register(
   (instance) => {

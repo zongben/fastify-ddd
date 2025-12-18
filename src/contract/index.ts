@@ -15,6 +15,7 @@ import type {
   RawServerDefault,
   RouteGenericInterface,
 } from "fastify";
+import { ERROR_CODES } from "../application/error.code.js";
 
 export type FastifyTypeBox = FastifyInstance<
   RawServerDefault,
@@ -45,22 +46,22 @@ export type FastifyReplyTypeBox<TSchema extends FastifySchema> = FastifyReply<
 
 export const makeOkSchema = <T extends TSchema>(data: T) => {
   return Type.Object({
-    messageCode: Type.String({ default: "SUCCESSED" }),
     data,
   });
 };
 
-export const makeErrSchema = (messageCode: string) => {
+export const makeErrSchema = (codes: ERROR_CODES[]) => {
   return Type.Object({
-    messageCode: Type.String({ default: messageCode }),
+    code: Type.Union(codes.map((err) => Type.String({ default: err }))),
+    message: Type.String(),
   });
 };
 
 export type OK<T> = {
-  messageCode: string;
   data: T;
 };
 
 export type Err = {
-  messageCode: string;
+  code: string;
+  message: string;
 };

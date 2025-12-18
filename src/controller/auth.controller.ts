@@ -10,9 +10,9 @@ import {
   FastifyRequestTypeBox,
 } from "../contract/index.js";
 import { AuthUseCases } from "../application/use-cases/use-case.context.js";
-import { handleError } from "./error.handler.js";
+import { errResponse } from "./error.handler.js";
 
-const makeAuthController = (deps: { uc: AuthUseCases; }) => {
+const makeAuthController = (deps: { uc: AuthUseCases }) => {
   const { uc } = deps;
 
   return {
@@ -29,10 +29,10 @@ const makeAuthController = (deps: { uc: AuthUseCases; }) => {
       matchResult(result, {
         ok: (v) => {
           return reply.OK<LoginReply>({
-            token: v.token
+            token: v.token,
           });
         },
-        err: handleError(reply)
+        err: errResponse(reply),
       });
     },
     register: async (
@@ -55,7 +55,7 @@ const makeAuthController = (deps: { uc: AuthUseCases; }) => {
             account,
           });
         },
-        err: handleError(reply),
+        err: errResponse(reply),
       });
     },
   };

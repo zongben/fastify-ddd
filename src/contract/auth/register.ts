@@ -4,9 +4,15 @@ import { ERROR_CODES } from "../../application/error.code.js";
 import { makeErrSchema, makeOkSchema } from "../index.js";
 
 const body = Type.Object({
-  account: Type.String(),
-  password: Type.String(),
-  username: Type.String(),
+  account: Type.String({
+    minLength: 1,
+  }),
+  password: Type.String({
+    minLength: 1,
+  }),
+  username: Type.String({
+    minLength: 1,
+  }),
 });
 
 const reply = Type.Object({
@@ -22,6 +28,6 @@ export const RegisterSchema = {
   body,
   response: {
     200: makeOkSchema(reply),
-    409: makeErrSchema(ERROR_CODES.ACCOUNT_IS_USED),
+    409: makeErrSchema([ERROR_CODES.ACCOUNT_IS_USED]),
   },
 };
