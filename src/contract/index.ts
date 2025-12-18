@@ -47,7 +47,7 @@ export type FastifyReplyTypeBox<TSchema extends FastifySchema> = FastifyReply<
 export const makeOkSchema = <T extends TSchema>(data: T) => {
   return Type.Object({
     data,
-  });
+  } as OK<T>);
 };
 
 export const makeErrSchema = (codes: ERROR_CODES[]) => {
