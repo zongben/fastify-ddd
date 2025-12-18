@@ -1,6 +1,4 @@
 import {
-  Type,
-  type TSchema,
   type TypeBoxTypeProvider,
 } from "@fastify/type-provider-typebox";
 import type {
@@ -15,7 +13,6 @@ import type {
   RawServerDefault,
   RouteGenericInterface,
 } from "fastify";
-import { ERROR_CODES } from "../application/error.code.js";
 
 export type FastifyTypeBox = FastifyInstance<
   RawServerDefault,
@@ -43,25 +40,3 @@ export type FastifyReplyTypeBox<TSchema extends FastifySchema> = FastifyReply<
   TSchema,
   TypeBoxTypeProvider
 >;
-
-export const makeOkSchema = <T extends TSchema>(data: T) => {
-  return Type.Object({
-    data,
-  } as OK<T>);
-};
-
-export const makeErrSchema = (codes: ERROR_CODES[]) => {
-  return Type.Object({
-    code: Type.Union(codes.map((err) => Type.String({ default: err }))),
-    message: Type.String(),
-  });
-};
-
-export type OK<T> = {
-  data: T;
-};
-
-export type Err = {
-  code: string;
-  message: string;
-};

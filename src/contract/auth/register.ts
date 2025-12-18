@@ -1,12 +1,9 @@
 import Type, { type Static } from "typebox";
 import { AuthSchema } from "./auth.contract.js";
 import { ERROR_CODES } from "../../application/error.code.js";
-import {
-  FastifyRequestTypeBox,
-  makeErrSchema,
-  makeOkSchema,
-} from "../index.js";
+import { FastifyRequestTypeBox } from "../index.js";
 import { FastifyError, HookHandlerDoneFunction } from "fastify";
+import { makeErrSchema, makeOkSchema } from "../responses.js";
 
 const body = Type.Object({
   account: Type.String({

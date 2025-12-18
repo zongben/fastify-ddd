@@ -1,6 +1,5 @@
 import Fastify, { FastifyError } from "fastify";
 import fastifyEnv from "@fastify/env";
-import type { Env } from "./controller/env.js";
 import type { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
@@ -11,9 +10,10 @@ import { makeRepositoryContext } from "./infra/repository.context.js";
 import { registerRoutes } from "./controller/routes.js";
 import { replyHttpPlugin } from "./shared/reply.extend.js";
 import { makeUseCaseContext } from "./application/use-cases/use-case.context.js";
-import { makeTokenService } from "./services/index.js";
 import { makePrisma } from "./shared/prisma.js";
-import { Err } from "./contract/index.js";
+import { Env } from "./infra/env.js";
+import { Err } from "./contract/responses.js";
+import { makeTokenService } from "./services/token.service.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

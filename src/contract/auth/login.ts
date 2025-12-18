@@ -1,7 +1,7 @@
 import Type, { type Static } from "typebox";
 import { AuthSchema } from "./auth.contract.js";
 import { ERROR_CODES } from "../../application/error.code.js";
-import { makeErrSchema, makeOkSchema } from "../index.js";
+import { makeErrSchema, makeOkSchema } from "../responses.js";
 
 const body = Type.Object({
   account: Type.String({

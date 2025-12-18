@@ -1,6 +1,6 @@
 import { type FastifyInstance, type FastifyReply } from "fastify";
 import fp from "fastify-plugin";
-import { Err } from "../contract/index.js";
+import { Err } from "../contract/responses.js";
 
 declare module "fastify" {
   interface FastifyReply {
@@ -8,11 +8,6 @@ declare module "fastify" {
     Conflict(err: Err): FastifyReply;
     Unauthorized(err: Err): FastifyReply;
   }
-}
-
-export enum httpStatus {
-  Conflict = "Conflict",
-  Unauthorized = "Unauthorized",
 }
 
 export const replyHttpPlugin = fp((instance: FastifyInstance) => {

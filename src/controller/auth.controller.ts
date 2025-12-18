@@ -12,7 +12,7 @@ import {
   FastifyRequestTypeBox,
 } from "../contract/index.js";
 import { AuthUseCases } from "../application/use-cases/use-case.context.js";
-import { errResponse } from "./error.handler.js";
+import { errResponse } from "../contract/responses.js";
 
 const makeAuthController = (deps: { uc: AuthUseCases }) => {
   const { uc } = deps;
