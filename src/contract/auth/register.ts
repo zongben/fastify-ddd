@@ -6,7 +6,7 @@ import {
   makeErrSchema,
   makeOkSchema,
 } from "../index.js";
-import { HookHandlerDoneFunction } from "fastify";
+import { FastifyError, HookHandlerDoneFunction } from "fastify";
 
 const body = Type.Object({
   account: Type.String({
@@ -52,4 +52,14 @@ export const registerPreValidation = (
     req.body.username = req.body.username.trim();
   }
   done();
+};
+
+export const registerErrorHandler = (err: FastifyError) => {
+  if (err.validation && err.validation[0]) {
+    const { instancePath, keyword } = err.validation[0];
+    if (instancePath === "/account" && keyword === "minLength") {
+      err.message = "帳號不可為空";
+    }
+  }
+  return err;
 };

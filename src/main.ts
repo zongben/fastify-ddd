@@ -13,6 +13,7 @@ import { replyHttpPlugin } from "./shared/reply.extend.js";
 import { makeUseCaseContext } from "./application/use-cases/use-case.context.js";
 import { makeTokenService } from "./services/index.js";
 import { makePrisma } from "./shared/prisma.js";
+import { Err } from "./contract/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -77,7 +78,7 @@ fastify.setErrorHandler((err: FastifyError, _, reply) => {
   reply.status(err.statusCode ?? 500).send({
     code: err.code,
     message: err.message,
-  });
+  } as Err);
 });
 
 fastify.register(

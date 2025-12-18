@@ -1,4 +1,5 @@
 import {
+  registerErrorHandler,
   registerPreValidation,
   RegisterSchema,
   type RegisterReply,
@@ -72,7 +73,11 @@ export const makeAuthRoutes =
         instance.post("/login", { schema: LoginSchema }, auth.login);
         instance.post(
           "/register",
-          { schema: RegisterSchema, preValidation: registerPreValidation },
+          {
+            schema: RegisterSchema,
+            preValidation: registerPreValidation,
+            errorHandler: registerErrorHandler,
+          },
           auth.register,
         );
       },
