@@ -4,3 +4,4 @@ export interface IUserRepository {
   createUser(user: User): Promise<User>;
   getUserByAccount(account: string): Promise<User | null>;
 }
+

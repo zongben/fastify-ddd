@@ -13,7 +13,7 @@ import { makeUseCaseContext } from "./application/use-cases/use-case.context.js"
 import { makePrisma } from "./shared/prisma.js";
 import { Env } from "./infra/env.js";
 import { Err } from "./contract/responses.js";
-import { makeTokenService } from "./services/token.service.js";
+import { makeTokenService } from "./infra/service.context.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

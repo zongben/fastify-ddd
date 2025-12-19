@@ -2,7 +2,7 @@ import { makeRegisterHandler } from "./auth/commands/register/register.handler.j
 import { makeLoginHandler } from "./auth/commands/login/login.handler.js";
 import { RepositoryContext } from "../../infra/repository.context.js";
 import { IUserRepository } from "../persistences/index.js";
-import { ITokenService } from "../../services/token.service.js";
+import { ITokenService } from "../services/index.js";
 
 const makeAuthUseCases = (deps: { userRepository: IUserRepository, tokenService: ITokenService }) => ({
   register: makeRegisterHandler(deps),
