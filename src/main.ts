@@ -6,14 +6,14 @@ import swaggerUI from "@fastify/swagger-ui";
 import jwt from "@fastify/jwt";
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
-import { makeRepositoryContext } from "./infra/repository.context.js";
 import { registerRoutes } from "./controller/routes.js";
 import { replyHttpPlugin } from "./shared/reply.extend.js";
-import { makeUseCaseContext } from "./application/use-cases/use-case.context.js";
-import { makePrisma } from "./shared/prisma.js";
 import { Env } from "./infra/env.js";
 import { Err } from "./contract/responses.js";
-import { makeTokenService } from "./infra/service.context.js";
+import { makePrisma } from "./shared/prisma.js";
+import { makeUseCases } from "./controller/di.js";
+import { makeRepositories } from "./infra/repositories/index.js";
+import { makeCryptService, makeTokenService } from "./infra/services/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -93,11 +93,12 @@ fastify.setErrorHandler((err: FastifyError, _, reply) => {
 
 fastify.register(
   (instance) => {
-    const ctx = makeUseCaseContext({
-      repoCtx: makeRepositoryContext({ db: makePrisma(env.DATABASE_URL) }),
+    const uc = makeUseCases({
+      repo: makeRepositories({ db: makePrisma(env.DATABASE_URL) }),
       tokenService: makeTokenService(instance.jwt),
+      cryptService: makeCryptService(),
     });
-    registerRoutes({ ctx })(instance);
+    registerRoutes({ uc })(instance);
   },
   { prefix: "/api" },
 );

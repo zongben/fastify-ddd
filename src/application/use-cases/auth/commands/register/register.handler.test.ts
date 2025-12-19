@@ -1,16 +1,18 @@
 import { assert, beforeEach, describe, expect, test, vi } from "vitest";
 import { RegisterCommand, makeRegisterHandler } from "./register.handler.js";
-import { makeUserRepository } from "../../../../../infra/user.repository.js";
 import { matchResult } from "../../../../../shared/result.js";
 import { ERROR_CODES } from "../../../../error.code.js";
-import { crypt } from "../../../../../utils/index.js";
 import { User } from "../../../../../domain/user/user.domain.js";
+import { IUserRepository } from "../../../../persistences/index.js";
+import { ICryptService } from "../../../../ports/index.js";
 
-let mockUserRepository: ReturnType<typeof makeUserRepository>;
+let mockUserRepository: IUserRepository;
+let mockCryptService: ICryptService;
 
 describe("RegisterHandler", () => {
   beforeEach(() => {
-    mockUserRepository = {} as ReturnType<typeof makeUserRepository>;
+    mockUserRepository = {} as IUserRepository;
+    mockCryptService = {} as ICryptService;
   });
 
   test("When user is exists", async () => {
@@ -18,6 +20,7 @@ describe("RegisterHandler", () => {
 
     const handler = makeRegisterHandler({
       userRepository: mockUserRepository,
+      cryptService: mockCryptService,
     });
     const result = await handler({} as RegisterCommand);
 
@@ -36,9 +39,11 @@ describe("RegisterHandler", () => {
   test("Success", async () => {
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(null);
     mockUserRepository.createUser = vi.fn();
+    mockCryptService.hash = vi.fn().mockResolvedValue("hashedPwd");
 
     const handler = makeRegisterHandler({
       userRepository: mockUserRepository,
+      cryptService: mockCryptService,
     });
     const result = await handler({
       account: "account",
@@ -46,12 +51,9 @@ describe("RegisterHandler", () => {
       password: "password",
     } as RegisterCommand);
 
-    expect(result.ok).toEqual(true);
-
     matchResult(result, {
-      ok: async (v) => {
-        expect(await crypt.compare("password", v.hashedPwd)).toBe(true);
-        expect(await crypt.compare("wrong", v.hashedPwd)).toBe(false);
+      ok: (v) => {
+        assert.ok(v);
       },
       err: {
         [ERROR_CODES.ACCOUNT_IS_USED]: () => {

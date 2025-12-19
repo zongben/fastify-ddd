@@ -32,10 +32,12 @@ export const makeUserEntity = (user: User) => {
   return {
     value: () => user,
     changeUserName: (username: string) => {
-      return makeUserEntity({
-        ...user,
-        username,
-      });
+      return makeUserEntity(
+        makeUser({
+          ...user,
+          username,
+        }),
+      );
     },
   };
 };

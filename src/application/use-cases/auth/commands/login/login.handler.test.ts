@@ -2,18 +2,19 @@ import { beforeEach, describe, expect, test, vi, assert } from "vitest";
 import { LoginCommand, makeLoginHandler } from "./login.handler.js";
 import { matchResult } from "../../../../../shared/result.js";
 import { ERROR_CODES } from "../../../../error.code.js";
-import { crypt } from "../../../../../utils/index.js";
 import { makeUser, User } from "../../../../../domain/user/user.domain.js";
 import { IUserRepository } from "../../../../persistences/index.js";
-import { ITokenService } from "../../../../services/index.js";
+import { ICryptService, ITokenService } from "../../../../ports/index.js";
 
 let mockUserRepository: IUserRepository;
-let mockTokenService: ITokenService
+let mockTokenService: ITokenService;
+let mockCryptService: ICryptService;
 
 describe("LoginHandler", () => {
   beforeEach(() => {
     mockUserRepository = {} as IUserRepository;
     mockTokenService = {} as ITokenService;
+    mockCryptService = {} as ICryptService;
   });
 
   test("When user not found", async () => {
@@ -21,7 +22,8 @@ describe("LoginHandler", () => {
 
     const handler = makeLoginHandler({
       userRepository: mockUserRepository,
-      tokenService: mockTokenService
+      tokenService: mockTokenService,
+      cryptService: mockCryptService,
     });
     const result = await handler({} as LoginCommand);
 
@@ -38,17 +40,15 @@ describe("LoginHandler", () => {
   });
 
   test("When password is wrong", async () => {
-    mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue({
-      hashedPwd: await crypt.hash("some_password"),
-    } as User);
+    mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue({} as User);
+    mockCryptService.compare = vi.fn().mockResolvedValue(false);
 
     const handler = makeLoginHandler({
       userRepository: mockUserRepository,
-      tokenService: mockTokenService
+      tokenService: mockTokenService,
+      cryptService: mockCryptService,
     });
-    const result = await handler({
-      password: "worng_password",
-    } as LoginCommand);
+    const result = await handler({} as LoginCommand);
 
     matchResult(result, {
       ok: () => {
@@ -66,19 +66,19 @@ describe("LoginHandler", () => {
     const mockUser = makeUser({
       id: "",
       account: "",
-      hashedPwd: await crypt.hash("some_password"),
+      hashedPwd: "",
       username: "",
     });
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(mockUser);
-    mockTokenService.sign = vi.fn(() => "token")
+    mockTokenService.sign = vi.fn(() => "token");
+    mockCryptService.compare = vi.fn().mockResolvedValue(true)
 
     const handler = makeLoginHandler({
       userRepository: mockUserRepository,
-      tokenService: mockTokenService
+      tokenService: mockTokenService,
+      cryptService: mockCryptService,
     });
-    const result = await handler({
-      password: "some_password",
-    } as LoginCommand);
+    const result = await handler({} as LoginCommand);
 
     matchResult(result, {
       ok: (v) => {

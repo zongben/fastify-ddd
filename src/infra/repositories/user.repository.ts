@@ -1,6 +1,6 @@
-import { makeUser, User } from "../domain/user/user.domain.js";
-import { IUserRepository } from "../application/persistences/index.js";
-import { DbClient } from "../shared/prisma.js";
+import { IUserRepository } from "../../application/persistences/index.js";
+import { makeUser, User } from "../../domain/user/user.domain.js";
+import { DbClient } from "../../shared/prisma.js";
 
 export const makeUserRepository = (deps: { db: DbClient }): IUserRepository => {
   const { db } = deps;

@@ -1,8 +1,9 @@
 import { ERROR_CODES } from "../../../../error.code.js";
 import { err, ok } from "../../../../../shared/result.js";
-import { crypt, uuid } from "../../../../../utils/index.js";
 import { makeUser } from "../../../../../domain/user/user.domain.js";
 import { IUserRepository } from "../../../../persistences/index.js";
+import { uuid } from "../../../../../utils/index.js";
+import { ICryptService } from "../../../../ports/index.js";
 
 export type RegisterCommand = {
   account: string;
@@ -14,8 +15,9 @@ export type RegisterError = ERROR_CODES.ACCOUNT_IS_USED;
 
 export const makeRegisterHandler = (deps: {
   userRepository: IUserRepository;
+  cryptService: ICryptService;
 }) => {
-  const { userRepository } = deps;
+  const { userRepository, cryptService } = deps;
 
   return async (command: RegisterCommand) => {
     const isUserExists = await userRepository.getUserByAccount(command.account);
@@ -27,7 +29,7 @@ export const makeRegisterHandler = (deps: {
     const user = makeUser({
       id: uuid(),
       account: command.account,
-      hashedPwd: await crypt.hash(command.password),
+      hashedPwd: await cryptService.hash(command.password),
       username: command.username,
     });
     await userRepository.createUser(user);

@@ -1,13 +1,13 @@
 import { describe, expect, test } from "vitest";
 import { makeUser, makeUserEntity } from "./user.domain.js";
-import { crypt, uuid } from "../../utils/index.js";
+import { uuid } from "../../utils/index.js";
 
 describe("User domain", () => {
   test("ChangeUserName", async () => {
     const mockUser = makeUser({
       id: uuid(),
       account: "account",
-      hashedPwd: await crypt.hash("some_password"),
+      hashedPwd: "hashedPwd",
       username: "username",
     });
 
