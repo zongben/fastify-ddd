@@ -11,20 +11,23 @@ export type LoginCommand = {
 
 export type LoginError = ERROR_CODES.LOGIN_FAILED;
 
-export const makeLoginHandler = (deps: { userRepository: IUserRepository, tokenService: ITokenService }) => {
+export const makeLoginHandler = (deps: {
+  userRepository: IUserRepository;
+  tokenService: ITokenService;
+}) => {
   const { userRepository, tokenService } = deps;
   return async (command: LoginCommand) => {
     const { account, password } = command;
 
     const user = await userRepository.getUserByAccount(account);
-    if (user == null || !await crypt.compare(password, user.hashedPwd)) {
+    if (user == null || !(await crypt.compare(password, user.hashedPwd))) {
       return err<LoginError>(ERROR_CODES.LOGIN_FAILED);
     }
 
     var token = tokenService.sign({
       id: user.id,
       account: user.account,
-    })
+    });
 
     return ok({ token });
   };
