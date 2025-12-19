@@ -3,11 +3,11 @@ import { makeUser, makeUserEntity } from "./user.domain.js";
 import { crypt, uuid } from "../../utils/index.js";
 
 describe("User domain", () => {
-  test("ChangeUserName", () => {
+  test("ChangeUserName", async () => {
     const mockUser = makeUser({
       id: uuid(),
       account: "account",
-      hashedPwd: crypt.hash("some_password"),
+      hashedPwd: await crypt.hash("some_password"),
       username: "username",
     });
 

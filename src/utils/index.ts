@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import { Validator } from "typebox/compile";
 import { v7 } from "uuid";
 
 export const crypt = {
@@ -12,4 +13,10 @@ export const crypt = {
 
 export const uuid = () => {
   return v7();
+};
+
+export const assertValid = (validator: Validator, value: any) => {
+  if (!validator.Check(value)) {
+    throw Error(JSON.stringify(validator.Errors(value)));
+  }
 };
