@@ -14,7 +14,7 @@ import {
 import { errResponse } from "../contract/responses.js";
 import { AuthUseCases } from "../application/use-cases/auth/index.js";
 
-const makeAuthController = (deps: { uc: AuthUseCases }) => {
+export const makeAuthController = (deps: { uc: AuthUseCases }) => {
   const { uc } = deps;
 
   return {
@@ -63,11 +63,10 @@ const makeAuthController = (deps: { uc: AuthUseCases }) => {
   };
 };
 
+export type AuthController = ReturnType<typeof makeAuthController>;
+
 export const makeAuthRoutes =
-  (deps: { uc: AuthUseCases }) => (fastify: FastifyInstance) => {
-    const auth = makeAuthController({
-      ...deps,
-    });
+  (auth: AuthController) => (fastify: FastifyInstance) => {
     fastify.register(
       (instance) => {
         instance.post("/login", { schema: LoginSchema }, auth.login);

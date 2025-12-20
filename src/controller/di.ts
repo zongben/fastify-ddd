@@ -1,21 +1,33 @@
-import { ICryptService, ITokenService } from "../application/ports/index.js";
 import { makeAuthUseCases } from "../application/use-cases/auth/index.js";
-import { Repositories } from "../infra/repositories/index.js";
+import { makeRepositories } from "../infra/repositories/index.js";
+import { makeCryptService, makeTokenService } from "../infra/services/index.js";
+import { DbClient } from "../shared/prisma.js";
+import { makeAuthController } from "./auth.controller.js";
+import { JWT } from "@fastify/jwt";
 
-export const makeUseCases = (deps: {
-  repo: Repositories;
-  tokenService: ITokenService;
-  cryptService: ICryptService;
-}) => {
-  const { repo, tokenService, cryptService } = deps;
+export const makeContainer = (deps: { jwt: JWT; db: DbClient }) => {
+  const { jwt, db } = deps;
 
-  return {
+  const tokenService = makeTokenService(jwt);
+  const cryptService = makeCryptService();
+
+  const repo = makeRepositories({
+    db,
+  });
+
+  const useCases = {
     auth: makeAuthUseCases({
       userRepository: repo.userRepository,
       tokenService,
       cryptService,
     }),
   };
+
+  return {
+    authController: makeAuthController({
+      uc: useCases.auth,
+    }),
+  };
 };
 
-export type UseCases = ReturnType<typeof makeUseCases>;
+export type Container = ReturnType<typeof makeContainer>;

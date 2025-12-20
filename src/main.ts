@@ -10,10 +10,8 @@ import { registerRoutes } from "./controller/routes.js";
 import { replyHttpPlugin } from "./shared/reply.extend.js";
 import { Env } from "./infra/env.js";
 import { Err } from "./contract/responses.js";
+import { makeContainer } from "./controller/di.js";
 import { makePrisma } from "./shared/prisma.js";
-import { makeUseCases } from "./controller/di.js";
-import { makeRepositories } from "./infra/repositories/index.js";
-import { makeCryptService, makeTokenService } from "./infra/services/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -65,14 +63,14 @@ await fastify.register(swaggerUI, {
 
 const env = fastify.getEnvs<Env>();
 
-fastify.register(jwt, {
+await fastify.register(jwt, {
   secret: env.JWT_KEY,
   sign: {
     expiresIn: "30d",
   },
 });
 
-fastify.register(replyHttpPlugin);
+await fastify.register(replyHttpPlugin);
 
 fastify.setErrorHandler((err: FastifyError, _, reply) => {
   const statusCode = err.statusCode ?? 500;
@@ -91,15 +89,15 @@ fastify.setErrorHandler((err: FastifyError, _, reply) => {
   } satisfies Err);
 });
 
-fastify.register(
-  (instance) => {
-    const uc = makeUseCases({
-      repo: makeRepositories({ db: makePrisma(env.DATABASE_URL) }),
-      tokenService: makeTokenService(instance.jwt),
-      cryptService: makeCryptService(),
-    });
-    registerRoutes({ uc })(instance);
-  },
+const container = makeContainer({
+  jwt: fastify.jwt,
+  db: makePrisma(env.DATABASE_URL),
+});
+
+await fastify.register(
+  registerRoutes({
+    container,
+  }),
   { prefix: "/api" },
 );
 
