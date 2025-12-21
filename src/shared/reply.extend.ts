@@ -6,7 +6,7 @@ declare module "fastify" {
   interface FastifyReply {
     OK<T>(data: T): FastifyReply;
     Created<T>(data: T): FastifyReply;
-    NoContent<T>(data: T): FastifyReply;
+    NoContent(): FastifyReply;
     BadRequest(err: Err): FastifyReply;
     Unauthorized(err: Err): FastifyReply;
     Forbidden(err: Err): FastifyReply;
@@ -26,10 +26,8 @@ export const replyHttpPlugin = fp((instance: FastifyInstance) => {
     return this.status(201).send({ data });
   });
 
-  instance.decorateReply("NoContent", function <
-    T,
-  >(this: FastifyReply, data: T) {
-    return this.status(204).send({ data });
+  instance.decorateReply("NoContent", function (this: FastifyReply) {
+    return this.status(204).send();
   });
 
   instance.decorateReply("BadRequest", function (this: FastifyReply, err: Err) {
