@@ -1,5 +1,5 @@
 import { type FastifyInstance } from "fastify";
-import { makeUserRoutes } from "./user.controller.js";
+import { makeUserRoutes, UserController } from "./user.controller.js";
 import { AuthController, makeAuthRoutes } from "./auth.controller.js";
 import { Container } from "./di.js";
 
@@ -9,12 +9,14 @@ const anonymousRoutes =
     makeAuthRoutes(auth)(fastify);
   };
 
-const jwtAuthRoutes = () => (fastify: FastifyInstance) => {
-  fastify.addHook("onRequest", async (req) => {
-    await req.jwtVerify();
-  });
-  makeUserRoutes()(fastify);
-};
+const jwtAuthRoutes =
+  (deps: { user: UserController }) => (fastify: FastifyInstance) => {
+    fastify.addHook("onRequest", async (req) => {
+      await req.jwtVerify();
+    });
+    const { user } = deps;
+    makeUserRoutes(user)(fastify);
+  };
 
 export const registerRoutes =
   (deps: { container: Container }) => (fastify: FastifyInstance) => {
@@ -25,5 +27,9 @@ export const registerRoutes =
         auth: container.authController,
       }),
     );
-    fastify.register(jwtAuthRoutes());
+    fastify.register(
+      jwtAuthRoutes({
+        user: container.userController,
+      }),
+    );
   };

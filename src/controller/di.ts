@@ -4,6 +4,7 @@ import { makeCryptService, makeTokenService } from "../infra/services/index.js";
 import { DbClient } from "../shared/prisma.js";
 import { makeAuthController } from "./auth.controller.js";
 import { JWT } from "@fastify/jwt";
+import { makeUserController } from "./user.controller.js";
 
 export const makeContainer = (deps: { jwt: JWT; db: DbClient }) => {
   const { jwt, db } = deps;
@@ -27,6 +28,7 @@ export const makeContainer = (deps: { jwt: JWT; db: DbClient }) => {
     authController: makeAuthController({
       uc: useCases.auth,
     }),
+    userController: makeUserController(),
   };
 };
 
