@@ -32,7 +32,7 @@ export const makeContainer = (deps: { jwt: JWT; db: DbClient }) => {
   };
 
   return {
-    resolve<T extends keyof typeof controllers>(
+    get<T extends keyof typeof controllers>(
       key: T,
     ): (typeof controllers)[T] {
       return controllers[key];

@@ -24,12 +24,12 @@ export const registerRoutes =
 
     fastify.register(
       anonymousRoutes({
-        auth: container.resolve("AuthController"),
+        auth: container.get("AuthController"),
       }),
     );
     fastify.register(
       jwtAuthRoutes({
-        user: container.resolve("UserController"),
+        user: container.get("UserController"),
       }),
     );
   };
