@@ -1,7 +1,7 @@
 import { type FastifyInstance } from "fastify";
 import { makeUserRoutes, UserController } from "./user.controller.js";
 import { AuthController, makeAuthRoutes } from "./auth.controller.js";
-import { Container } from "./di.js";
+import { Container } from "./container.js";
 
 const anonymousRoutes =
   (deps: { auth: AuthController }) => (fastify: FastifyInstance) => {

@@ -10,7 +10,7 @@ import { registerRoutes } from "./controller/routes.js";
 import { replyHttpPlugin } from "./shared/reply.extend.js";
 import { Env } from "./infra/env.js";
 import { Err } from "./contract/responses.js";
-import { makeContainer } from "./controller/di.js";
+import { makeContainer } from "./controller/container.js";
 import { makePrisma } from "./shared/prisma.js";
 
 const __filename = fileURLToPath(import.meta.url);
