@@ -89,6 +89,13 @@ fastify.setErrorHandler((err: FastifyError, _, reply) => {
   } satisfies Err);
 });
 
+fastify.setNotFoundHandler((_, reply) => {
+  return reply.status(404).send({
+    code: "NOT_FOUND",
+    message: "Not Found"
+  } satisfies Err)
+})
+
 const container = makeContainer({
   jwt: fastify.jwt,
   db: makePrisma(env.DATABASE_URL),
