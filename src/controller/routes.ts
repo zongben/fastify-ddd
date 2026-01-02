@@ -18,7 +18,7 @@ const jwtAuthRoutes =
     makeUserRoutes(user)(fastify);
   };
 
-export const registerRoutes =
+export const registerApiRoutes =
   (deps: { container: Container }) => (fastify: FastifyInstance) => {
     const { container } = deps;
 

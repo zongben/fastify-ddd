@@ -6,7 +6,7 @@ import swaggerUI from "@fastify/swagger-ui";
 import jwt from "@fastify/jwt";
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
-import { registerRoutes } from "./controller/routes.js";
+import { registerApiRoutes } from "./controller/routes.js";
 import { replyHttpPlugin } from "./shared/reply.extend.js";
 import { Env } from "./infra/env.js";
 import { Err } from "./contract/responses.js";
@@ -102,7 +102,7 @@ const container = makeContainer({
 });
 
 await fastify.register(
-  registerRoutes({
+  registerApiRoutes({
     container,
   }),
   { prefix: "/api" },
