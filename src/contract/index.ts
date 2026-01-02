@@ -22,21 +22,21 @@ export type FastifyTypeBox = FastifyInstance<
   TypeBoxTypeProvider
 >;
 
-export type FastifyRequestTypeBox<TSchema extends FastifySchema> =
+export type FastifyRequestTypeBox<T extends FastifySchema> =
   FastifyRequest<
     RouteGenericInterface,
     RawServerDefault,
     RawRequestDefaultExpression,
-    TSchema,
+    T,
     TypeBoxTypeProvider
   >;
 
-export type FastifyReplyTypeBox<TSchema extends FastifySchema> = FastifyReply<
+export type FastifyReplyTypeBox<T extends FastifySchema> = FastifyReply<
   RouteGenericInterface,
   RawServerDefault,
   RawRequestDefaultExpression,
   RawReplyDefaultExpression,
   ContextConfigDefault,
-  TSchema,
+  T,
   TypeBoxTypeProvider
->;
+>

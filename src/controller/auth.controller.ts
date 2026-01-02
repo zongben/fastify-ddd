@@ -2,16 +2,15 @@ import {
   registerErrorHandler,
   registerPreValidation,
   RegisterSchema,
-  type RegisterReply,
 } from "../contract/auth/register.js";
-import { LoginSchema, type LoginReply } from "../contract/auth/login.js";
+import { LoginSchema } from "../contract/auth/login.js";
 import { FastifyInstance } from "fastify";
 import { matchResult } from "../shared/result.js";
 import {
   FastifyReplyTypeBox,
   FastifyRequestTypeBox,
 } from "../contract/index.js";
-import { errResponse } from "../contract/responses.js";
+import { errResponse, OkResponse } from "../contract/responses.js";
 import { AuthUseCases } from "../application/use-cases/auth/index.js";
 
 export const makeAuthController = (deps: { uc: AuthUseCases }) => {
@@ -30,9 +29,9 @@ export const makeAuthController = (deps: { uc: AuthUseCases }) => {
       });
       matchResult(result, {
         ok: (v) => {
-          return reply.OK<LoginReply>({
-            token: v.token,
-          });
+          OkResponse(reply, {
+            token: v.token
+          })
         },
         err: errResponse(reply),
       });
@@ -52,7 +51,7 @@ export const makeAuthController = (deps: { uc: AuthUseCases }) => {
       matchResult(result, {
         ok: (v) => {
           const { id, account } = v;
-          return reply.OK<RegisterReply>({
+          OkResponse(reply, {
             id,
             account,
           });

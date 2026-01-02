@@ -1,6 +1,7 @@
-import { FastifyReply } from "fastify";
+import { FastifyReply, FastifySchema } from "fastify";
 import { ERROR_CODES } from "../application/error.code.js";
-import { TSchema, Type } from "@fastify/type-provider-typebox";
+import { Static, TSchema, Type } from "@fastify/type-provider-typebox";
+import { FastifyReplyTypeBox } from "./index.js";
 
 export const makeOkSchema = <T extends TSchema>(data: T) => {
   return Type.Object({
@@ -41,3 +42,15 @@ export const errResponse = (reply: FastifyReply) => ({
       message: "account is used",
     }),
 });
+
+export const OkResponse = <T extends FastifySchema>(reply: FastifyReplyTypeBox<T>, data: T["response"] extends { 200: infer U } ? U extends TSchema ? Static<U>["data"] : never : never) => {
+  return reply.OK({ data });
+}
+
+export const CreatedResponse = <T extends FastifySchema>(reply: FastifyReplyTypeBox<T>, data: T["response"] extends { 201: infer U } ? U extends TSchema ? Static<U>["data"] : never : never) => {
+  return reply.Created({ data });
+}
+
+export const NoContentResponse = <T extends FastifySchema>(reply: FastifyReplyTypeBox<T>) => {
+  return reply.NoContent();
+}

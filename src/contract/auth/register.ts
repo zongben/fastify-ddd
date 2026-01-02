@@ -1,4 +1,4 @@
-import Type, { type Static } from "typebox";
+import Type from "typebox";
 import { AuthSchema } from "./auth.contract.js";
 import { ERROR_CODES } from "../../application/error.code.js";
 import { FastifyRequestTypeBox } from "../index.js";
@@ -21,8 +21,6 @@ const reply = Type.Object({
   id: Type.String(),
   account: Type.String(),
 });
-
-export type RegisterReply = Static<typeof reply>;
 
 export const RegisterSchema = {
   ...AuthSchema,

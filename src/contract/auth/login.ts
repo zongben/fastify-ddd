@@ -1,4 +1,4 @@
-import Type, { type Static } from "typebox";
+import Type from "typebox";
 import { AuthSchema } from "./auth.contract.js";
 import { ERROR_CODES } from "../../application/error.code.js";
 import { makeErrSchema, makeOkSchema } from "../responses.js";
@@ -15,8 +15,6 @@ const body = Type.Object({
 const reply = Type.Object({
   token: Type.String(),
 });
-
-export type LoginReply = Static<typeof reply>;
 
 export const LoginSchema = {
   ...AuthSchema,

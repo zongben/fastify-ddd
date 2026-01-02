@@ -19,11 +19,11 @@ declare module "fastify" {
 
 export const replyHttpPlugin = fp((instance: FastifyInstance) => {
   instance.decorateReply("OK", function <T>(this: FastifyReply, data: T) {
-    return this.status(200).send({ data });
+    return this.status(200).send(data);
   });
 
   instance.decorateReply("Created", function <T>(this: FastifyReply, data: T) {
-    return this.status(201).send({ data });
+    return this.status(201).send(data);
   });
 
   instance.decorateReply("NoContent", function (this: FastifyReply) {
