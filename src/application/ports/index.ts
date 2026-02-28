@@ -1,4 +1,4 @@
-export interface ITokenService {
+export interface IJwtokenService {
   sign(payload: object): string;
 }
 

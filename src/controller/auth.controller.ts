@@ -13,8 +13,8 @@ import {
 import { errResponse, OkResponse } from "../contract/responses.js";
 import { AuthUseCases } from "../application/use-cases/auth/index.js";
 
-export const makeAuthController = (deps: { uc: AuthUseCases }) => {
-  const { uc } = deps;
+export const makeAuthController = (deps: { authUseCases: AuthUseCases }) => {
+  const { authUseCases } = deps;
 
   return {
     login: async (
@@ -23,15 +23,15 @@ export const makeAuthController = (deps: { uc: AuthUseCases }) => {
     ) => {
       const { account, password } = req.body;
 
-      const result = await uc.login({
+      const result = await authUseCases.login({
         account,
         password,
       });
       matchResult(result, {
         ok: (v) => {
           OkResponse(reply, {
-            token: v.token
-          })
+            token: v.token,
+          });
         },
         err: errResponse(reply),
       });
@@ -42,7 +42,7 @@ export const makeAuthController = (deps: { uc: AuthUseCases }) => {
     ) => {
       const { account, password, username } = req.body;
 
-      const result = await uc.register({
+      const result = await authUseCases.register({
         account,
         password,
         username,
@@ -64,21 +64,24 @@ export const makeAuthController = (deps: { uc: AuthUseCases }) => {
 
 export type AuthController = ReturnType<typeof makeAuthController>;
 
-export const makeAuthRoutes =
-  (auth: AuthController) => (fastify: FastifyInstance) => {
-    fastify.register(
-      (instance) => {
-        instance.post("/login", { schema: LoginSchema }, auth.login);
-        instance.post(
-          "/register",
-          {
-            schema: RegisterSchema,
-            preValidation: registerPreValidation,
-            errorHandler: registerErrorHandler,
-          },
-          auth.register,
-        );
-      },
-      { prefix: "/auth" },
-    );
-  };
+export const makeAuthRoutes = (fastify: FastifyInstance) => {
+  const authController = fastify.diContainer.resolve(
+    "authController",
+  ) as AuthController;
+
+  fastify.register(
+    (instance) => {
+      instance.post("/login", { schema: LoginSchema }, authController.login);
+      instance.post(
+        "/register",
+        {
+          schema: RegisterSchema,
+          preValidation: registerPreValidation,
+          errorHandler: registerErrorHandler,
+        },
+        authController.register,
+      );
+    },
+    { prefix: "/auth" },
+  );
+};

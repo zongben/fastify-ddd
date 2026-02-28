@@ -12,12 +12,15 @@ export const makeUserController = () => {
 
 export type UserController = ReturnType<typeof makeUserController>;
 
-export const makeUserRoutes =
-  (user: UserController) => (fastify: FastifyInstance) => {
-    fastify.register(
-      (instance) => {
-        instance.get("/", user.getUser);
-      },
-      { prefix: "/user" },
-    );
-  };
+export const makeUserRoutes = (fastify: FastifyInstance) => {
+  const userController = fastify.diContainer.resolve(
+    "userController",
+  ) as UserController;
+
+  fastify.register(
+    (instance) => {
+      instance.get("/", userController.getUser);
+    },
+    { prefix: "/user" },
+  );
+};

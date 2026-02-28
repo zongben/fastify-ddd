@@ -10,8 +10,8 @@ import { registerApiRoutes } from "./controller/routes.js";
 import { replyHttpPlugin } from "./shared/reply.extend.js";
 import { Env } from "./infra/env.js";
 import { Err } from "./contract/responses.js";
-import { makeContainer } from "./controller/container.js";
-import { makePrisma } from "./shared/prisma.js";
+import { fastifyAwilixPlugin } from "@fastify/awilix";
+import { initContainer } from "./controller/container.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -70,6 +70,13 @@ await fastify.register(jwt, {
   },
 });
 
+await fastify.register(fastifyAwilixPlugin);
+
+initContainer({
+  url: env.DATABASE_URL,
+  jwt: fastify.jwt,
+});
+
 await fastify.register(replyHttpPlugin);
 
 fastify.setErrorHandler((err: FastifyError, _, reply) => {
@@ -92,21 +99,11 @@ fastify.setErrorHandler((err: FastifyError, _, reply) => {
 fastify.setNotFoundHandler((_, reply) => {
   return reply.status(404).send({
     code: "NOT_FOUND",
-    message: "Not Found"
-  } satisfies Err)
-})
-
-const container = makeContainer({
-  jwt: fastify.jwt,
-  db: makePrisma(env.DATABASE_URL),
+    message: "Not Found",
+  } satisfies Err);
 });
 
-await fastify.register(
-  registerApiRoutes({
-    container,
-  }),
-  { prefix: "/api" },
-);
+await fastify.register(registerApiRoutes, { prefix: "/api" });
 
 fastify.listen({ port: 3000 }, (err, addr) => {
   if (err) {
