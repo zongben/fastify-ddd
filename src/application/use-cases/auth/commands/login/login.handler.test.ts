@@ -4,16 +4,16 @@ import { matchResult } from "../../../../../shared/result.js";
 import { ERROR_CODES } from "../../../../error.code.js";
 import { makeUser, User } from "../../../../../domain/user/user.domain.js";
 import { IUserRepository } from "../../../../persistences/index.js";
-import { ICryptService, ITokenService } from "../../../../ports/index.js";
+import { ICryptService, IJwtokenService } from "../../../../ports/index.js";
 
 let mockUserRepository: IUserRepository;
-let mockTokenService: ITokenService;
+let mockJwtokenService: IJwtokenService;
 let mockCryptService: ICryptService;
 
 describe("LoginHandler", () => {
   beforeEach(() => {
     mockUserRepository = {} as IUserRepository;
-    mockTokenService = {} as ITokenService;
+    mockJwtokenService = {} as IJwtokenService;
     mockCryptService = {} as ICryptService;
   });
 
@@ -22,7 +22,7 @@ describe("LoginHandler", () => {
 
     const handler = makeLoginHandler({
       userRepository: mockUserRepository,
-      tokenService: mockTokenService,
+      jwtokenService: mockJwtokenService,
       cryptService: mockCryptService,
     });
     const result = await handler({} as LoginCommand);
@@ -45,7 +45,7 @@ describe("LoginHandler", () => {
 
     const handler = makeLoginHandler({
       userRepository: mockUserRepository,
-      tokenService: mockTokenService,
+      jwtokenService: mockJwtokenService,
       cryptService: mockCryptService,
     });
     const result = await handler({} as LoginCommand);
@@ -70,12 +70,12 @@ describe("LoginHandler", () => {
       username: "",
     });
     mockUserRepository.getUserByAccount = vi.fn().mockResolvedValue(mockUser);
-    mockTokenService.sign = vi.fn(() => "token");
+    mockJwtokenService.sign = vi.fn(() => "token");
     mockCryptService.compare = vi.fn().mockResolvedValue(true)
 
     const handler = makeLoginHandler({
       userRepository: mockUserRepository,
-      tokenService: mockTokenService,
+      jwtokenService: mockJwtokenService,
       cryptService: mockCryptService,
     });
     const result = await handler({} as LoginCommand);
