@@ -13,9 +13,8 @@ export const makeUserController = () => {
 export type UserController = ReturnType<typeof makeUserController>;
 
 export const makeUserRoutes = (fastify: FastifyInstance) => {
-  const userController = fastify.diContainer.resolve(
-    "userController",
-  ) as UserController;
+  const userController =
+    fastify.diContainer.resolve<UserController>("userController");
 
   fastify.register(
     (instance) => {

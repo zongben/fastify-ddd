@@ -8,8 +8,8 @@ import { makeAuthUseCases } from "../application/use-cases/auth/index.js";
 import { makeAuthController } from "./auth.controller.js";
 import { JWT } from "@fastify/jwt";
 import { makePrisma } from "../shared/prisma.js";
-import { asFunction, asValue } from "awilix/lib/resolvers.js";
 import { makeUserController } from "./user.controller.js";
+import { asFunction, asValue } from "awilix";
 
 export const initContainer = (deps: { url: string; jwt: JWT }) => {
   const { url, jwt } = deps;

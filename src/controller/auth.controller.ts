@@ -65,9 +65,8 @@ export const makeAuthController = (deps: { authUseCases: AuthUseCases }) => {
 export type AuthController = ReturnType<typeof makeAuthController>;
 
 export const makeAuthRoutes = (fastify: FastifyInstance) => {
-  const authController = fastify.diContainer.resolve(
-    "authController",
-  ) as AuthController;
+  const authController =
+    fastify.diContainer.resolve<AuthController>("authController");
 
   fastify.register(
     (instance) => {
