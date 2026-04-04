@@ -1,6 +1,6 @@
 import Type, { Static } from "typebox";
 import { Compile } from "typebox/compile";
-import { assertValid } from "../../utils/index.js";
+import { assertValid } from "../utils/index.js";
 
 const UserType = Type.ReadonlyType(
   Type.Object({

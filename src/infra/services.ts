@@ -1,9 +1,6 @@
 import { JWT } from "@fastify/jwt";
 import bcrypt from "bcrypt";
-import {
-  ICryptService,
-  IJwtokenService,
-} from "../../application/ports/index.js";
+import { IJwtokenService, ICryptService } from "../application/ports.js";
 
 export const makeJwtokenService = (deps: { jwt: JWT }): IJwtokenService => {
   const { jwt } = deps;

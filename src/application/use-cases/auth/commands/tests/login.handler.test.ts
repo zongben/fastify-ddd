@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, test, vi, assert } from "vitest";
-import { LoginCommand, makeLoginHandler } from "./login.handler.js";
 import { matchResult } from "../../../../../shared/result.js";
 import { ERROR_CODES } from "../../../../error.code.js";
-import { makeUser, User } from "../../../../../domain/user/user.domain.js";
-import { IUserRepository } from "../../../../persistences/index.js";
-import { ICryptService, IJwtokenService } from "../../../../ports/index.js";
+import { User, makeUser } from "../../../../../domain/user.domain.js";
+import { IUserRepository } from "../../../../persistences.js";
+import { IJwtokenService, ICryptService } from "../../../../ports.js";
+import { makeLoginHandler, LoginCommand } from "../login.handler.js";
 
 let mockUserRepository: IUserRepository;
 let mockJwtokenService: IJwtokenService;

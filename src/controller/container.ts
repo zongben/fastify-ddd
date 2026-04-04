@@ -1,8 +1,5 @@
 import { diContainer } from "@fastify/awilix";
-import {
-  makeCryptService,
-  makeJwtokenService,
-} from "../infra/services/index.js";
+import { makeCryptService, makeJwtokenService } from "../infra/services.js";
 import { makeUserRepository } from "../infra/repositories/user.repository.js";
 import { makeAuthUseCases } from "../application/use-cases/auth/index.js";
 import { makeAuthController } from "./auth.controller.js";

@@ -1,5 +1,5 @@
 import { assert, describe, expect, test, vi } from "vitest";
-import { assertValid } from ".";
+import { assertValid } from "./index.js";
 
 describe("assertValid", () => {
   test("does nothing when validation passes", async () => {

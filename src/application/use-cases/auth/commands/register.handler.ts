@@ -1,9 +1,9 @@
-import { ERROR_CODES } from "../../../../error.code.js";
-import { err, ok } from "../../../../../shared/result.js";
-import { makeUser } from "../../../../../domain/user/user.domain.js";
-import { IUserRepository } from "../../../../persistences/index.js";
-import { uuid } from "../../../../../utils/index.js";
-import { ICryptService } from "../../../../ports/index.js";
+import { makeUser } from "../../../../domain/user.domain.js";
+import { err, ok } from "../../../../shared/result.js";
+import { uuid } from "../../../../utils/index.js";
+import { ERROR_CODES } from "../../../error.code.js";
+import { IUserRepository } from "../../../persistences.js";
+import { ICryptService } from "../../../ports.js";
 
 export type RegisterCommand = {
   account: string;

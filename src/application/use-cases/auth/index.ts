@@ -1,7 +1,7 @@
-import { IUserRepository } from "../../persistences/index.js";
-import { ICryptService, IJwtokenService } from "../../ports/index.js";
-import { makeLoginHandler } from "./commands/login/login.handler.js";
-import { makeRegisterHandler } from "./commands/register/register.handler.js";
+import { makeRegisterHandler } from "./commands/register.handler.js";
+import { makeLoginHandler } from "./commands/login.handler.js";
+import { IUserRepository } from "../../persistences.js";
+import { IJwtokenService, ICryptService } from "../../ports.js";
 
 export const makeAuthUseCases = (deps: {
   userRepository: IUserRepository;

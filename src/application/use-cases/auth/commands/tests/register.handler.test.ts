@@ -1,10 +1,10 @@
 import { assert, beforeEach, describe, expect, test, vi } from "vitest";
-import { RegisterCommand, makeRegisterHandler } from "./register.handler.js";
 import { matchResult } from "../../../../../shared/result.js";
 import { ERROR_CODES } from "../../../../error.code.js";
-import { User } from "../../../../../domain/user/user.domain.js";
-import { IUserRepository } from "../../../../persistences/index.js";
-import { ICryptService } from "../../../../ports/index.js";
+import { IUserRepository } from "../../../../persistences.js";
+import { User } from "../../../../../domain/user.domain.js";
+import { ICryptService } from "../../../../ports.js";
+import { makeRegisterHandler, RegisterCommand } from "../register.handler.js";
 
 let mockUserRepository: IUserRepository;
 let mockCryptService: ICryptService;

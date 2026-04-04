@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
-import { makeUser, makeUserEntity } from "./user.domain.js";
 import { uuid } from "../../utils/index.js";
+import { makeUser, makeUserEntity } from "../user.domain.js";
 
 describe("User domain", () => {
   test("ChangeUserName", async () => {
