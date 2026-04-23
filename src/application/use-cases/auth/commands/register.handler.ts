@@ -23,7 +23,7 @@ export const makeRegisterHandler = (deps: {
     const isUserExists = await userRepository.getUserByAccount(command.account);
 
     if (isUserExists) {
-      return err<RegisterError>(ERROR_CODES.ACCOUNT_IS_USED);
+      return err(ERROR_CODES.ACCOUNT_IS_USED);
     }
 
     const user = makeUser({

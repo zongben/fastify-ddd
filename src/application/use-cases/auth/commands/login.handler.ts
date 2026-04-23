@@ -8,8 +8,6 @@ export type LoginCommand = {
   password: string;
 };
 
-export type LoginError = ERROR_CODES.LOGIN_FAILED;
-
 export const makeLoginHandler = (deps: {
   userRepository: IUserRepository;
   jwtokenService: IJwtokenService;
@@ -25,7 +23,7 @@ export const makeLoginHandler = (deps: {
       user == null ||
       !(await cryptService.compare(password, user.hashedPwd))
     ) {
-      return err<LoginError>(ERROR_CODES.LOGIN_FAILED);
+      return err(ERROR_CODES.LOGIN_FAILED);
     }
 
     var token = jwtokenService.sign({

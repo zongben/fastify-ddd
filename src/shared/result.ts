@@ -14,7 +14,7 @@ export type ErrorResult<E, U = unknown> = {
 export type OneOf<T, E> = OkResult<T> | ErrorResult<E>;
 
 export const ok = <T>(data: T): OkResult<T> => ({ ok: true, data });
-export const err = <E>(code: E, meta?: unknown): ErrorResult<E> => ({
+export const err = <const E>(code: E, meta?: unknown): ErrorResult<E> => ({
   ok: false,
   error: {
     code,
