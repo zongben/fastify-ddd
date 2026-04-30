@@ -1,28 +1,28 @@
+import { eq } from "drizzle-orm";
 import { IUserRepository } from "../../application/persistences.js";
 import { makeUser, User } from "../../domain/user.domain.js";
-import { DbClient } from "../../shared/prisma.js";
+import { DbClient } from "../../shared/drizzle.js";
+import { usersTable } from "../db/schema.js";
 
 export const makeUserRepository = (deps: { db: DbClient }): IUserRepository => {
   const { db } = deps;
 
   return {
     createUser: async (user: User) => {
-      await db.user.create({
-        data: {
-          id: user.id,
-          account: user.account,
-          password: user.hashedPwd,
-          username: user.username,
-        },
+      await db.insert(usersTable).values({
+        id: user.id,
+        account: user.account,
+        password: user.hashedPwd,
+        username: user.username,
       });
       return user;
     },
     getUserByAccount: async (account: string) => {
-      const user = await db.user.findUnique({
-        where: {
-          account,
-        },
-      });
+      const [user] = await db
+        .select()
+        .from(usersTable)
+        .where(eq(usersTable.account, account))
+        .limit(1);
 
       if (!user) return null;
 

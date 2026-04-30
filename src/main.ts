@@ -71,7 +71,6 @@ await fastify.register(jwt, {
 });
 
 await fastify.register(fastifyAwilixPlugin);
-
 initContainer({
   url: env.DATABASE_URL,
   jwt: fastify.jwt,
