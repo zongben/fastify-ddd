@@ -18,11 +18,9 @@ export const makeUserRepository = (deps: { db: DbClient }): IUserRepository => {
       return user;
     },
     getUserByAccount: async (account: string) => {
-      const [user] = await db
-        .select()
-        .from(usersTable)
-        .where(eq(usersTable.account, account))
-        .limit(1);
+      const user = await db.query.usersTable.findFirst({
+        where: eq(usersTable.account, account),
+      });
 
       if (!user) return null;
 
