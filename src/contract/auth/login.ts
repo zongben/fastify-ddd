@@ -1,5 +1,5 @@
 import Type from "typebox";
-import { AuthSchema } from "./auth.contract.js";
+import { AuthSchema } from "./index.js";
 import { ERROR_CODES } from "../../application/error.code.js";
 import { makeErrSchema, makeOkSchema } from "../responses.js";
 
